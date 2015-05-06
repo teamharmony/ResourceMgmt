@@ -1,0 +1,113 @@
+Little about the interaction design
+====================================================
+
+End user-------------->Login.jsp----<<New User>>----->Resgistration.jsp		
+					|					|				MainView.jsp(secured)
+					|					|					|
+				      \|/					|				      /|\
+					|					|					|
+				Spring Security filter------------ |------------------------------
+					|					|
+					|					|
+					|				      \|/
+					|					|
+					|----------------<-------------
+					|
+					|
+				ResourcesController---------ResourcesService----------ResurcesDAO
+
+
+/resourceMgmt/users [POST] registers a new user.
+/resourceMgmt/users/{user-id} [GET] fetches details of a registered user
+/resourceMgmt/users/{user-id} [PUT] edit profile of a registered user
+
+(Need details about FB and LinkedIn log-in API)
+
+=======================================================================
+back-end details
+
+
+create database resourcemgmt;
+use resourcemgmt;
+
+set autocommit = 0;
+
+create table users (
+	username varchar(12) not null,
+	password varchar(32) not null,
+	primary key(username)
+	) engine=InnoDB;
+
+create table authorities (
+	username varchar(12) not null,
+	authority varchar(10) not null,
+	foreign key(username) references users(username)
+	) engine=InnoDB;
+
+create table user_details(
+	username varchar(12) not null,
+	email varchar(30) not null,
+	country varchar(30) not null,
+	city varchar(30) not null,
+	province varchar(30) not null,
+	zip varchar(10) not null,
+	foreign key(username) references users(username)
+	) engine=InnoDB;
+
+
+delimiter //
+create procedure registerUser(IN _username varchar(12), 
+						IN _pwd varchar(32),
+						IN _authority varchar(10),
+						IN _email varchar(30), 
+						IN _country varchar(30), 
+						IN _city varchar(30), 
+						IN _province varchar(30), 
+						IN _zip varchar(10))
+begin 
+	
+	declare _rollback_flag int default 0;
+	declare continue handler for sqlexception 
+		set _rollback_flag = 1;
+
+	start transaction;
+	insert into users(username, password) values(_username, md5(_pwd));
+	insert into authorities (username, authority) values(_username, _authority);
+	insert into users_details (username, email, country, city, province, zip) 
+		values(_username, _email, _country, _city, _province, _zip);
+
+	if _rollback_flag then
+		rollback;
+	else
+		commit;
+	end if;
+
+end//
+delimiter ;
+
+
+delimiter //
+create procedure updateUserDetails(IN _username varchar(12), 
+						IN _email varchar(30), 
+						IN _country varchar(30), 
+						IN _city varchar(30), 
+						IN _province varchar(30), 
+						IN _zip varchar(10))
+begin 
+	update users
+		set username = _username, email = _email, country = _country,
+			city = _city, province = _province, zip = _zip
+			where username = _username;
+end//
+delimiter ;
+
+
+delimiter //
+create procedure updateUserPassword(IN _username varchar(12), 
+						IN _pwd varchar(32))
+begin 
+	update users
+		set password = md5(_pwd)
+			where username = _username;
+end//
+delimiter ;
