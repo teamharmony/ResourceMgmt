@@ -1,0 +1,326 @@
+/* css style */
+body,html
+{
+	height:100%;
+}
+.title
+{
+	font-family:forte;
+	font-size:26px;
+	color:#fff;
+}
+.titlemd
+{
+		font-family:forte;
+	font-size:20px;
+	color:#fff;
+}
+.noborder
+{
+	border:none !important;
+}
+.nopadding
+{
+	padding:0px;
+}
+/*---------------welecome screen----------------*/
+.welcomescreen
+{
+	background:#00A2D8;
+	min-height:100%;
+}
+.welcomepic
+{
+	padding-top:86px;
+	padding-bottom:30px;
+}
+.welcometext
+{
+	font-family:forte;
+	font-size:26px;
+	color:#fff;
+	padding-bottom:60px;
+}
+.welcomebutton a
+{
+	width:100%;
+	background:#fff;
+	color:#00A2D8;
+	font-family:Arial Rounded MT;
+	font-size:12px;
+	margin-bottom:8px;
+	border:none;
+	padding-top:18px;
+	padding-bottom:18px;
+	border-radius:3px;
+	display:block;
+	text-align:center;
+	text-decoration:none;
+}
+/*---------------login screen----------------*/
+.loginscreen
+{
+	background:#00A2D8;
+	min-height:100%;
+	padding-top:90px;
+}
+.logintitle
+{
+	padding-bottom:25px;
+}
+.loginform .textbox
+{
+	background:#fff;
+	border-radius:4px;
+}
+.loginform .textbox input[type="text"],.loginform .textbox input[type="password"]
+{
+	background:none;
+	border:none;
+	width:100%;
+	height:40px;
+	padding-left:19px;
+	padding-right:19px;
+	border-bottom:solid 1px #D1D1D1;
+	font-family:Arial Rounded MT;
+	font-size:11px;
+}
+.loginform .rememberforgotbox
+{
+	padding-top:20px;
+	padding-bottom:12px;
+}
+.loginform .rememberforgotbox a
+{
+	display:block;
+	width:100%;
+	color:#fff;
+	font-family:Arial Rounded MT;
+	font-size:12px;
+	text-align:center;
+	padding-bottom:8px;
+}
+.loginform .loginbutton button
+{
+	
+	width:100%;
+	background:#fff;
+	color:#00A2D8;
+	font-family:Arial Rounded MT;
+	font-size:12px;
+	margin-bottom:8px;
+	border:none;
+	padding-top:18px;
+	padding-bottom:18px;
+	border-radius:3px;
+}
+.sociallogin  .facebookbtn
+{
+	padding-right:0px;
+}
+.sociallogin  .tweeterbtn
+{
+	
+}
+.sociallogin  .likedinbtn
+{
+	padding-left:0px;
+		
+}
+.sociallogin .facebookbtn a
+{
+	background:#0059B2;
+	color:#fff;
+	display:block;
+	height:44px;
+	line-height:44px;
+	text-align:center;
+	width:100%;
+	border-radius:3px;
+	font-size:16px;
+	
+}
+
+.sociallogin .tweeterbtn a
+{
+	background:#1EBEF0;
+	color:#fff;
+	display:block;
+	height:44px;
+	line-height:44px;
+	text-align:center;
+	width:100%;
+	border-radius:3px;
+	font-size:16px;
+	
+}
+
+
+.sociallogin .likedinbtn a
+{
+	background:#006699;
+	color:#fff;
+	display:block;
+	height:44px;
+	line-height:44px;
+	text-align:center;
+	width:100%;
+	border-radius:3px;
+	font-size:16px;
+	
+}
+/*---------------forgotscreen part-1 screen----------------*/
+
+.forgotpasswordscreen
+{
+	background:#00A2D8;
+	min-height:100%;
+	padding-top:90px;
+}
+.forgotpassword
+{
+	padding-bottom:15px;
+}
+.forgotpass1form
+{
+	padding-top:140px;
+}
+.forgotpass1form input[type="text"]
+{
+	width:100%;
+	background:#fff;
+	color:#B6B6B6;
+	text-align:center;
+	padding-top:14px;
+	padding-bottom:14px;
+	font-size:11px;
+	font-family:Arial Rounded MT;
+	margin-bottom:16px;
+	border:none;
+	border-radius:3px;
+}
+
+.forgotpass1form button
+{
+	width:100%;
+	background:#fff;
+	color:#00A0D8;
+	text-align:center;
+	padding-top:17px;
+	padding-bottom:17px;
+	font-size:12px;
+	font-family:Arial Rounded MT;
+	border:none;
+	border-radius:3px;
+}
+.forgotpassinfo
+{
+	font-size:11px;
+	font-family:Arial Rounded MT;
+	color:#fff;
+	padding-left:40px;
+	padding-right:40px;
+	
+}
+.forgotpassinfomail
+{
+	padding-top:11px;
+	padding-bottom:11px;
+	font-size:13px;
+	font-family:Arial Rounded MT;
+	color:#fff;
+}
+.forgotpass2form .textbox
+{
+	background:#fff;
+	border-radius:4px;
+}
+
+.forgotpass2form .textbox input[type="text"],.forgotpass2form .textbox input[type="password"]
+{
+	background:none;
+	border:none;
+	width:100%;
+	height:40px;
+	padding-left:19px;
+	padding-right:19px;
+	border-bottom:solid 1px #D1D1D1;
+	font-family:Arial Rounded MT;
+	font-size:11px;
+}
+
+.forgotpass2form button
+{
+	width:100%;
+	background:#fff;
+	color:#00A0D8;
+	text-align:center;
+	padding-top:17px;
+	padding-bottom:17px;
+	font-size:12px;
+	font-family:Arial Rounded MT;
+	border:none;
+	border-radius:3px;
+	margin-top:25px;
+}
+/*---------------Registration part-1 screen----------------*/
+.registrationscreen
+{
+	background:#00A2D8;
+	min-height:100%;
+	padding-top:44px;
+}
+.registration
+{
+	padding-bottom:17px;
+}
+.registration-part2
+{
+	padding-bottom:38px;
+}
+.registraionform .textbox
+{
+	background:#fff;
+	border-radius:4px;
+}
+.registraionform .textbox input[type="text"],.registraionform .textbox input[type="password"],.registraionform .textbox input[type="tel"]
+{
+	background:none;
+	border:none;
+	width:100%;
+	height:40px;
+	padding-left:19px;
+	padding-right:19px;
+	border-bottom:solid 1px #D1D1D1;
+	font-family:Arial Rounded MT;
+	font-size:11px;
+}
+
+.registraionform button
+{
+	width:100%;
+	background:#fff;
+	color:#00A0D8;
+	text-align:center;
+	padding-top:17px;
+	padding-bottom:17px;
+	font-size:12px;
+	font-family:Arial Rounded MT;
+	border:none;
+	border-radius:3px;
+	margin-top:25px;
+}
+
+.captcha
+{
+	background:url(../img/captcha.png) no-repeat right;
+	height:40px;
+}
+.reg_picture img
+{
+	width:34px;
+	height:34px;
+	border:solid 3px #fff;
+	border-radius:100%;
+	margin-top:5px;
+}
