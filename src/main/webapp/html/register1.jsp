@@ -41,9 +41,9 @@
 							<input id="contact" type="tel" placeholder="CONTACT NUMBER *"  required>
 							<div class="row">
 								<div class="col-xs-9">
-									<input type="file" capture="camera">
+									<input id="imgInp" type="file" accept="image/*" capture="camera">
 								</div>
-								<div class="col-xs-3 reg_picture"><img src="../img/uploadedpic.png" width="35" height="30" alt=""/></div>
+								<div class="col-xs-3 reg_picture"><img id="imgDisp" src="../img/defaultImg.jpg" alt=""/></div>
 							</div>
 						</div>
 						<button type="submit" onclick="fnRegCont()">CONTINUE</button>       
