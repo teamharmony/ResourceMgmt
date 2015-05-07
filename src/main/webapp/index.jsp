@@ -2,48 +2,50 @@
 
 <html lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8">
-    <title>meet me pal</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>meet me pal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
 
-   
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
 
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+
+<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
       <script src="../assets/js/html5shiv.js"></script>
     <![endif]-->
 
-    <!-- Fav and touch icons -->
-  
+<!-- Fav and touch icons -->
+
 </head>
 
 <body>
 	<!------------------welcome screen--------------->
 	<div class="container welcomescreen" id="welcomescreen">
 		<div class="row">
-			<div class="col-sm-12 text-center welcomepic"><img src="img/welcome.png" width="127" height="114" alt=""/></div>
+			<div class="col-sm-12 text-center welcomepic">
+				<img src="img/welcome.png" width="127" height="114" alt="" />
+			</div>
 			<div class="col-sm-12 text-center welcometext">Meet Me Pal</div>
-			
+
 			<div class="col-sm-12 welcomebutton">
-				<a href="html/register1.jsp" id="register">FREE REGISTRATION</a>
-				<a href="html/login.jsp" id="login">LOGIN</a>
+				<a href="html/registration" id="register">FREE REGISTRATION</a> <a
+					href="html/login" id="login">LOGIN</a>
 			</div>
 
 		</div>
 
 	</div>
-  <!--------------------------------------------->
-  
-  <!----------------forgot password part 1 screen----------------->
-  
-    
-<!--<div class="container forgotpasswordscreen" id="forgotscreenpart1">
+	<!--------------------------------------------->
+
+	<!----------------forgot password part 1 screen----------------->
+
+
+	<!--<div class="container forgotpasswordscreen" id="forgotscreenpart1">
   
   <div class="row">
   	
@@ -63,15 +65,15 @@
   </div>
   
   </div>-->
-  
-  
-  <!--------------------------------------------->
-  
-  
-  <!----------------forgot password part 1 screen----------------->
-  
-    
-  <!--<div class="container forgotpasswordscreen" id="forgotscreenpart2">
+
+
+	<!--------------------------------------------->
+
+
+	<!----------------forgot password part 1 screen----------------->
+
+
+	<!--<div class="container forgotpasswordscreen" id="forgotscreenpart2">
   
   <div class="row">
   	
@@ -101,13 +103,13 @@
   </div>
   
   </div>-->
-  
-  
-  <!--------------------------------------------->
-  
-  
-   <!----------------Register part1 screen----------------->
-  <!--   <div class="container registrationscreen" id="registrationscreenpart1">
+
+
+	<!--------------------------------------------->
+
+
+	<!----------------Register part1 screen----------------->
+	<!--   <div class="container registrationscreen" id="registrationscreenpart1">
   
   <div class="row">
   	
@@ -142,11 +144,11 @@
   </div>
   
   </div-->
-   
-   <!--------------------------------------------->
-   
-   <!----------------Register part2 screen----------------->
-    <!-- <div class="container registrationscreen" id="registrationscreenpart2">
+
+	<!--------------------------------------------->
+
+	<!----------------Register part2 screen----------------->
+	<!-- <div class="container registrationscreen" id="registrationscreenpart2">
   
   <div class="row">
   	
@@ -180,14 +182,15 @@
   </div>
   
   </div>-->
-   
-   <!--------------------------------------------->
-  
+
+	<!--------------------------------------------->
 
 
-    <script src="js/jquery.js"></script>
+
+	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/meetmepal.js"></script>
-  
 
-</body></html>
+
+</body>
+</html>

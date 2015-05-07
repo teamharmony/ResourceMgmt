@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-         id="WebApp_ID" version="2.5">
+	id="WebApp_ID" version="2.5">
 
-    <display-name>ResourceMgmt</display-name>
-    
-   <!--
-		- Location of the XML file that defines the root application context.
-		- Applied by ContextLoaderListener.
-	-->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
+	<display-name>ResourceMgmt</display-name>
+
+	<!-- - Location of the XML file that defines the root application context. 
+		- Applied by ContextLoaderListener. -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
         	/WEB-INF/resourceMgmt-service.xml
         	/WEB-INF/resourceMgmt-security.xml
         </param-value>
-    </context-param>
+	</context-param>
 
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
@@ -30,28 +28,72 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</filter-mapping>
 
 
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
-    
-    
-    <!--
-		- Servlet that dispatches request to registered handlers (Controller implementations).
-	-->
-    <servlet>
-        <servlet-name>resourceMgmt</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-       	<init-param>
-       		<param-name>contextConfigLocation</param-name>
-       		<param-value>/WEB-INF/resourceMgmt-servlet.xml</param-value>
-       	</init-param>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
 
-    <servlet-mapping>
-        <servlet-name>resourceMgmt</servlet-name>
-        <url-pattern>/resources</url-pattern>
-    </servlet-mapping>
+
+	<!-- - Servlet that dispatches request to registered handlers (Controller 
+		implementations). -->
+	<servlet>
+		<servlet-name>resourceMgmt</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/resourceMgmt-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>index</servlet-name>
+		<jsp-file>/index.jsp</jsp-file>
+	</servlet>
+
+
+	<servlet>
+		<servlet-name>registration</servlet-name>
+		<jsp-file>/html/register1.jsp</jsp-file>
+	</servlet>
+	<servlet>
+		<servlet-name>login</servlet-name>
+		<jsp-file>/html/login.jsp</jsp-file>
+	</servlet>
+	<servlet>
+		<servlet-name>home</servlet-name>
+		<jsp-file>/html/home.jsp</jsp-file>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>home</servlet-name>
+		<url-pattern>/html/home</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>index</servlet-name>
+		<url-pattern>/index</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet-mapping>
+		<servlet-name>login</servlet-name>
+		<url-pattern>/html/login</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet-mapping>
+		<servlet-name>registration</servlet-name>
+		<url-pattern>/html/registration</url-pattern>
+	</servlet-mapping>
+
+
+
+
+	<servlet-mapping>
+		<servlet-name>resourceMgmt</servlet-name>
+		<url-pattern>/resources/*</url-pattern>
+	</servlet-mapping>
 
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

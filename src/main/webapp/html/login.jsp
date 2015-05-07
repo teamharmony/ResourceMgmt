@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+	
    
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../css/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link href="<c:url value='/css/bootstrap.min.css'/>" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="<c:url value='/css/font-awesome.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/style.css'/>">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -72,9 +73,9 @@
   
   
   
-    <script src="../js/jquery.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/meetmepal.js"></script>
+    <script src="<c:url value='/js/jquery.js'/>"></script>
+	<script src="<c:url value='/js/bootstrap.min.js'/>"></script>
+	<script src="<c:url value='/js/meetmepal.js'/>"></script>
   
 
 </body></html>

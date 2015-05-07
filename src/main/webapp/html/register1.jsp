@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -9,9 +10,9 @@
     <meta name="author" content="">
 
    
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="../css/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link href="<c:url value='/css/bootstrap.min.css'/>" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="<c:url value='/css/font-awesome.css'/>">
+    <link rel="stylesheet" type="text/css" href="<c:url value='/css/style.css'/>">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -24,24 +25,24 @@
 <body onload="drawCaptcha()">
 	<!----------------Register part1 screen----------------->
 	<div class="container registrationscreen">
-		<form method="POST" action="<c:url value='/j_spring_security_check'/>" >
+		<form method="POST" action="<c:url value='/resources'/>" enctype="multipart/form-data" >
 			<div class="row" id="registrationscreenpart1">
 				<div class="col-sm-12 text-center title">Registration</div>
 				<div class="col-sm-12 text-center registration titlemd">Personal Information</div>
 				
 				<div class="col-sm-12 text-center registraionform">
 						<div class="textbox">
-							<input id="fName" type="text" placeholder="FIRST NAME *" required>
-							<input id="mName" type="text" placeholder="MIDDLE NAME *" required>
-							<input id="lName" type="text" placeholder="LAST NAME *"  required>
-							<input id="city" type="text" placeholder="CITY *"  required>
-							<input id="state" type="text" placeholder="STATE *"  required>
-							<input id="country" type="text" placeholder="COUNTRY *"  required>
-							<input id="zipcode" type="text" placeholder="ZIPCODE *"  required>
-							<input id="contact" type="tel" placeholder="CONTACT NUMBER *"  required>
+							<input id="fName" name="fName" type="text" placeholder="FIRST NAME *" required>
+							<input id="mName" name="mName" type="text" placeholder="MIDDLE NAME *" required>
+							<input id="lName" name="lName" type="text" placeholder="LAST NAME *"  required>
+							<input id="city" name="city" type="text" placeholder="CITY *"  required>
+							<input id="state" name="state" type="text" placeholder="STATE *"  required>
+							<input id="country" name="country" type="text" placeholder="COUNTRY *"  required>
+							<input id="zipcode" name="zipCode" type="text" placeholder="ZIPCODE *"  required>
+							<input id="contact" name="contact" type="tel" placeholder="CONTACT NUMBER *"  required>
 							<div class="row">
 								<div class="col-xs-9">
-									<input type="file" capture="camera">
+									<input type="file" name="profilePic" capture="camera">
 								</div>
 								<div class="col-xs-3 reg_picture"><img src="../img/uploadedpic.png" width="35" height="30" alt=""/></div>
 							</div>
@@ -56,10 +57,10 @@
 				
 				<div class="col-sm-12 text-center registraionform">
 						<div class="textbox">
-							<input id="username" type="text" placeholder="USER NAME *" required>
-							<input id="email" type="text" placeholder="EMAIL *" required>
-							<input id="password" type="text" placeholder="PASSWORD *"  required onfocusout="fnCheckPass()">
-							<input id="confirmPass" type="text" placeholder="CONFIRM PASSWORD *"  required onfocusout="fnCheckPass()">
+							<input id="username" name="username" type="text" placeholder="USER NAME *" required>
+							<input id="email" name="email" type="text" placeholder="EMAIL *" required>
+							<input id="password" name="password" type="text" placeholder="PASSWORD *"  required onfocusout="fnCheckPass()">
+							<input id="confirmPass" name="confirmPass" type="text" placeholder="CONFIRM PASSWORD *"  required onfocusout="fnCheckPass()">
 							<div class="row">
 								<div class="col-xs-8"> <input id="captcha" type="text" placeholder="CAPTCHA *" class="noborder"  required></div>
 								<div class="col-xs-4">
@@ -68,7 +69,7 @@
 								</div>
 							</div>
 						</div>
-						<button type="submit" onclick="fnRegConfirm()">REGISTER</button>
+						<input type="submit" onclick="fnRegConfirm()">REGISTER</button>
 				</div>
 			</div>
 		</form>
@@ -76,9 +77,9 @@
    
 	<!--------------------------------------------->
    
-    <script src="../js/jquery.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/meetmepal.js"></script>
+    <script src="<c:url value='/js/jquery.js'/>"></script>
+	<script src="<c:url value='/js/bootstrap.min.js'/>"></script>
+	<script src="<c:url value='/js/meetmepal.js'/>"></script>
   
 
 </body>
