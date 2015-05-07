@@ -41,7 +41,7 @@
 					<c:if test="${not empty param.error}">
 						<div style="text-align:center;padding-top:8px">
 						<font color="red">
-							<i>Login error.</i><i>Reason:</i> ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} 
+							<i>Login error.</i><i> Reason:</i> ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} 
 						</font>
 						</div>
 					</c:if>

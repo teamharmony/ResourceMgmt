@@ -1,3 +1,13 @@
+@font-face {
+    font-family: forte;
+    src: url(../fonts/ufonts.com_forte.ttf);
+}
+@font-face {
+    font-family: Arial Rounded MT;
+    src: url(../fonts/ARLRDBD.TTF);
+}
+
+
 /* css style */
 body,html
 {
@@ -11,7 +21,7 @@ body,html
 }
 .titlemd
 {
-		font-family:forte;
+	font-family:forte;
 	font-size:20px;
 	color:#fff;
 }
@@ -99,6 +109,7 @@ body,html
 	font-size:12px;
 	text-align:center;
 	padding-bottom:8px;
+	cursor: pointer;
 }
 
 .loginform .rememberforgotbox a
@@ -150,6 +161,7 @@ body,html
 {
 	vertical-align: middle;
 	margin: 0;
+	cursor: pointer;
 }
 
 .loginform .loginbutton button
@@ -320,7 +332,7 @@ body,html
 {
 	background:#00A2D8;
 	min-height:100%;
-	padding-top:44px;
+	padding-top:30px;
 }
 .registration
 {
