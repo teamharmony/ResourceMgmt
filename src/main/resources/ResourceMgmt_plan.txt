@@ -51,10 +51,17 @@ create table user_details(
 	city varchar(30) not null,
 	province varchar(30) not null,
 	zip varchar(10) not null,
+	contact varchar(15) not null,
+	profilePic longblob,
 	foreign key(username) references users(username)
 	) engine=InnoDB;
 
 
+
+EXAMPLE: call registerUser("admin", "admin123", "ROLE_USER", "admin@somedomain.com", "India", "Pune", "Maharashtra", "411040", "+919822455787", null);
+
+	
+drop procedure registerUser;		
 delimiter //
 create procedure registerUser(IN _username varchar(12), 
 						IN _pwd varchar(32),
@@ -63,7 +70,10 @@ create procedure registerUser(IN _username varchar(12),
 						IN _country varchar(30), 
 						IN _city varchar(30), 
 						IN _province varchar(30), 
-						IN _zip varchar(10))
+						IN _zip varchar(10),
+						IN _contact varchar(15),
+						IN _profilePic longblob						
+						)
 begin 
 	
 	declare _rollback_flag int default 0;
@@ -73,8 +83,8 @@ begin
 	start transaction;
 	insert into users(username, password) values(_username, md5(_pwd));
 	insert into authorities (username, authority) values(_username, _authority);
-	insert into users_details (username, email, country, city, province, zip) 
-		values(_username, _email, _country, _city, _province, _zip);
+	insert into user_details (username, email, country, city, province, zip, contact, profilePic) 
+		values(_username, _email, _country, _city, _province, _zip, _contact, _profilePic);
 
 	if _rollback_flag then
 		rollback;
@@ -86,24 +96,29 @@ end//
 delimiter ;
 
 
+EXAMPLE: call updateUser("admin", "changedEmail@somedomain.com", "IN", "PUNE", "MAHARASHTRA", "411040", "020-201455", null); 
+
+drop procedure updateUser;
 delimiter //
-create procedure updateUserDetails(IN _username varchar(12), 
+create procedure updateUser(IN _username varchar(12), 
 						IN _email varchar(30), 
 						IN _country varchar(30), 
 						IN _city varchar(30), 
 						IN _province varchar(30), 
-						IN _zip varchar(10))
+						IN _zip varchar(10),
+						IN _contact varchar(15),
+						IN _profilePic longblob)
 begin 
-	update users
+	update user_details
 		set username = _username, email = _email, country = _country,
-			city = _city, province = _province, zip = _zip
+			city = _city, province = _province, zip = _zip, contact = _contact, profilePic = _profilePic
 			where username = _username;
 end//
 delimiter ;
 
-
+drop procedure updatePassword;
 delimiter //
-create procedure updateUserPassword(IN _username varchar(12), 
+create procedure updatePassword(IN _username varchar(12), 
 						IN _pwd varchar(32))
 begin 
 	update users
@@ -111,3 +126,15 @@ begin
 			where username = _username;
 end//
 delimiter ;
+
+drop procedure isUserAvailable;
+delimiter //
+create procedure isUserAvailable(IN _username varchar(12))
+begin 
+	select * from users
+			where username = _username;
+end//
+delimiter ;
+
+
+
