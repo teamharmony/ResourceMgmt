@@ -23,6 +23,17 @@ End user-------------->Login.jsp----<<New User>>----->Resgistration.jsp
 
 (Need details about FB and LinkedIn log-in API)
 
+===================================================================
+Some syntax
+	--declare _rollback_flag int default 0;
+	--declare continue handler for sqlexception 
+	--	set _rollback_flag = 1;	
+	--if _rollback_flag then
+	--	rollback;
+	--else
+		commit;
+	--end if;
+		
 =======================================================================
 back-end details
 
@@ -60,7 +71,7 @@ create table user_details(
 
 EXAMPLE: call registerUser("admin", "admin123", "ROLE_USER", "admin@somedomain.com", "India", "Pune", "Maharashtra", "411040", "+919822455787", null);
 
-	
+
 drop procedure registerUser;		
 delimiter //
 create procedure registerUser(IN _username varchar(12), 
@@ -76,21 +87,24 @@ create procedure registerUser(IN _username varchar(12),
 						)
 begin 
 	
-	declare _rollback_flag int default 0;
-	declare continue handler for sqlexception 
-		set _rollback_flag = 1;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		rollback;
+		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
+ 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
+		SELECT @full_error;
+	END;
+
+
 
 	start transaction;
-	insert into users(username, password) values(_username, md5(_pwd));
-	insert into authorities (username, authority) values(_username, _authority);
-	insert into user_details (username, email, country, city, province, zip, contact, profilePic) 
-		values(_username, _email, _country, _city, _province, _zip, _contact, _profilePic);
+		insert into users(username, password) values(_username, md5(_pwd));
+		insert into authorities (username, authority) values(_username, _authority);
+		insert into user_details (username, email, country, city, province, zip, contact, profilePic) 
+			values(_username, _email, _country, _city, _province, _zip, _contact, _profilePic);
+	commit;
 
-	if _rollback_flag then
-		rollback;
-	else
-		commit;
-	end if;
 
 end//
 delimiter ;
@@ -109,6 +123,15 @@ create procedure updateUser(IN _username varchar(12),
 						IN _contact varchar(15),
 						IN _profilePic longblob)
 begin 
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
+ 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
+		SELECT @full_error;
+	END;
+	
 	update user_details
 		set username = _username, email = _email, country = _country,
 			city = _city, province = _province, zip = _zip, contact = _contact, profilePic = _profilePic
@@ -121,6 +144,14 @@ delimiter //
 create procedure updatePassword(IN _username varchar(12), 
 						IN _pwd varchar(32))
 begin 
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
+ 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
+		SELECT @full_error;
+	END;
+	
 	update users
 		set password = md5(_pwd)
 			where username = _username;
