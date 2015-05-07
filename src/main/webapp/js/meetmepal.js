@@ -54,6 +54,21 @@ function fnForgotPass(){
 	alert("Reset Info was send to:" + forgot);
 };
 
+$("#imgInp").change(function(){
+    readURL(this);
+});
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            $('#imgDisp').attr('src', e.target.result);
+        }
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 //Created / Generates the captcha function    
 function drawCaptcha()
 {
