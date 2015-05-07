@@ -23,13 +23,6 @@
 </head>
 
 <body>
-	<c:if test="${not empty param.error}">
-		<font color="red">
-			<i>Login error.</i> </br>
-			<i>Reason:</i> ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} 
-		</font>
-	</c:if>
-
 	<!----------------login screen----------------->
   	<div class="container loginscreen" id="loginscreen">
   
@@ -38,22 +31,33 @@
 		<div class="col-sm-12 text-center titlemd logintitle">Login</div>
 		
 		<div class="col-sm-12">
-				<div class="loginform">
-					<form method="POST" action="<c:url value='/j_spring_security_check'/>">
-						<div class="textbox">
-							<input id="userId" type="text" name="j_username" placeholder="USER NAME">
-							<input id="password" type="password" name="j_password" placeholder="PASSWORD" class="noborder">
+			<div class="loginform">
+				<form method="POST" action="<c:url value='/j_spring_security_check'/>">
+					<div class="textbox">
+						<input id="userId" type="text" name="j_username" placeholder="USER NAME">
+						<input id="password" type="password" name="j_password" placeholder="PASSWORD" class="noborder">
+					</div>
+					
+					<c:if test="${not empty param.error}">
+						<div style="text-align:center;padding-top:8px">
+						<font color="red">
+							<i>Login error.</i><i>Reason:</i> ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message} 
+						</font>
 						</div>
-						
-						<div class="rememberforgotbox">
-							<!-- <a href=""><i class="glyphicon glyphicon-check"></i> REMEMBER PASSWORD</a>-->
-							<input id="rememberMe" type="checkbox" name="_spring_security_remember_me"><i>Remember Me</i></input>
-							<a href="forgot.html"> FORGOT YOUR PASSWORD ?</a>
+					</c:if>
+	
+					<div class="rememberforgotbox">
+						<div class="rememberChk">
+							<input id="rememberMe" type="checkbox" name="_spring_security_remember_me"></input>
+							<label for="rememberMe"> Remember Me</label>
 						</div>
-						<div class="loginbutton">
-							<button id="btnLogin" type="submit">LOG IN</button>
-						</div>
-					</form>
+						<a href="forgot.html"> FORGOT YOUR PASSWORD ?</a>
+					</div>
+					
+					<div class="loginbutton">
+						<button id="btnLogin" type="submit">LOG IN</button>
+					</div>
+				</form>
 				<div class="sociallogin">
 					<div class="row">
 						<div class="col-xs-4  facebookbtn"><a href=""><i class="fa fa-facebook "></i></a></div>

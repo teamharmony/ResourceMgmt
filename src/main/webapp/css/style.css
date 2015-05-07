@@ -62,7 +62,7 @@ body,html
 {
 	background:#00A2D8;
 	min-height:100%;
-	padding-top:90px;
+	padding-top:80px;
 }
 .logintitle
 {
@@ -87,19 +87,71 @@ body,html
 }
 .loginform .rememberforgotbox
 {
-	padding-top:20px;
+	padding-top:12px;
 	padding-bottom:12px;
 }
+
+.loginform .rememberforgotbox label,
 .loginform .rememberforgotbox a
 {
-	display:block;
-	width:100%;
 	color:#fff;
 	font-family:Arial Rounded MT;
 	font-size:12px;
 	text-align:center;
 	padding-bottom:8px;
 }
+
+.loginform .rememberforgotbox a
+{
+	display:block;
+	width:100%; 
+}
+/* Remember checkbox */
+.loginform .rememberforgotbox .rememberChk {
+  position: relative;
+  text-align: center;
+  label {
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #fcfff4;
+    background: linear-gradient(top, #fcfff4 0%, #dfe5d7 40%, #b3bead 100%);
+    border-radius: 4px;
+    box-shadow: inset 0px 1px 1px white, 0px 1px 3px rgba(0,0,0,0.5);
+    &:after {
+      content: '';
+      width: 9px;
+      height: 5px;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      border: 3px solid #333;
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      opacity: 0;
+      transform: rotate(-45deg);
+    }
+    &:hover::after {
+      opacity: 0.5;
+    }
+  }
+  input[type=checkbox] {
+    visibility: hidden;
+    &:checked + label:after {
+      opacity: 1;
+    }
+  }    
+}
+/* end remember checkbox */
+
+.loginform .rememberforgotbox .rememberChk input
+{
+	vertical-align: middle;
+	margin: 0;
+}
+
 .loginform .loginbutton button
 {
 	
