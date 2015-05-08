@@ -382,8 +382,8 @@ body,html
 }
 .reg_picture img
 {
-	width: 40px;
-	height: 40px;
+	width: 50px;
+	height: 50px;
 	border:solid 3px #fff;
 }
 
@@ -397,6 +397,20 @@ body,html
 	color: red;
 	padding-top: 10px;
 }
+
+/* Edit Screen CSS start */
+.editscreen
+{
+	background:#00A2D8;
+	min-height:100%;
+	padding-top:24px;
+}
+
+.editscreen .row .edit 
+{
+	padding-bottom:14px;
+}
+/* Edit Screen CSS end */
 
 /* Home Screen CSS start */
 .homescreen
