@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
  <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+ <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -28,12 +29,14 @@
 </head>
 </head>
 <body>
+<sec:authentication var="principal" property="principal" />
 	<div class="container homescreen" id="homescreen">
 		<div class="row">
 			<div class="col-xs-4"><span style="color:white">Welcome <%=request.getUserPrincipal().getName() %>!!</span></div>
 			<div class="col-xs-4 title">Meet Me Pal</div>
 			<div class="col-xs-4" style="text-align:right">
-				<input type="button" value="Edit Profile" />
+				<a href="<c:url value='/resources/${principal.username}'/>"><i style="color:white">Edit Profile</i></a>
+				<span>&nbsp;|&nbsp;</span>
 				<a href="<c:url value='/j_spring_security_logout'/>"><i style="color:white">Logout</i></a>
 			</div>
 		</div>

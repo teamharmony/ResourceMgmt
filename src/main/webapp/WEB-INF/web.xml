@@ -71,6 +71,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet>
 
 
+	<servlet>
+		<servlet-name>edit</servlet-name>
+		<jsp-file>/html/edit.jsp</jsp-file>
+	</servlet>
+
+
+	<servlet-mapping>
+		<servlet-name>edit</servlet-name>
+		<url-pattern>/html/edit</url-pattern>
+	</servlet-mapping>
+
+
 	<servlet-mapping>
 		<servlet-name>forgot</servlet-name>
 		<url-pattern>/html/forgot</url-pattern>
@@ -99,7 +111,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	</servlet-mapping>
 
 
-
+	<servlet-mapping>
+		<servlet-name>resourceMgmt</servlet-name>
+		<url-pattern>/resendPassword</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>resourceMgmt</servlet-name>

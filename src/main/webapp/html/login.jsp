@@ -52,7 +52,7 @@
 							<input id="rememberMe" type="checkbox" name="_spring_security_remember_me"></input>
 							<label for="rememberMe"> Remember Me</label>
 						</div>
-						<a href="forgot.html"> FORGOT YOUR PASSWORD ?</a>
+						<a href="<c:url value='/html/forgot'/>"> FORGOT YOUR PASSWORD ?</a>
 					</div>
 					
 					<div class="loginbutton">

@@ -2,17 +2,18 @@ package prj.resources.mgmt;
 
 
 
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import prj.resources.mgmt.domain.Location;
@@ -89,6 +90,7 @@ public class ResourceController {
 		} catch (Exception e) {
 			// TODO: handle exception
 			//Add individual attributes so that the fields appear pre-populated incase of an exception. 
+			
 			return "registration";
 		}
 		
@@ -96,7 +98,7 @@ public class ResourceController {
 	}
 	
 	
-	@RequestMapping(value="/resources/{username}", method = RequestMethod.GET)
+	@RequestMapping(value="/{username}", method = RequestMethod.GET)
 	public String getUser(@PathVariable("username") String username, Model model) {
 		User user = registrationService.getUserDetailsByName(username);
 		model.addAttribute("user", user);
@@ -119,7 +121,8 @@ public class ResourceController {
 	 * @param contact
 	 * @param profilPic
 	 */
-	@RequestMapping(value="/resources/{username}", method = RequestMethod.PUT)
+	//TODO: Should have been PUT but since HTML forms only support POST/GET we have no alternative
+	@RequestMapping(value="/{username}", method = RequestMethod.POST, params="_method=put")
 	public String updateUser(
 			@PathVariable("username") String username,
 			@RequestParam(required = true, value = "fName") String fName,
@@ -156,17 +159,19 @@ public class ResourceController {
 			registrationService.update(user);
 		} catch (Exception e) {
 			// TODO: handle exception
+			return "hello";
 		}
-		return "redirect:html/home";
+		return "redirect:/html/home";
 		
 
 	}
 	
 	
 	@ResponseBody
-	@RequestMapping(value="/resources/{userName}/profilePic", method=RequestMethod.GET)
-	public byte[] getProfilePic(String userName){
+	@RequestMapping(value="/{userName}/profilePic", method=RequestMethod.GET)
+	public byte[] getProfilePic(@PathVariable("userName")String userName, HttpServletResponse response){
 		return registrationService.getProfilePic(userName);
+		
 	}
 	
 

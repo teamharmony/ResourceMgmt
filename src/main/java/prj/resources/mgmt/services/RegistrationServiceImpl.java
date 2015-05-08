@@ -44,9 +44,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 
 		User user = new User();
 		user.setUsername(userName);
-		user.setfName((String) out.get("_fName"));
-		user.setmName((String) out.get("_mName"));
-		user.setlName((String) out.get("_lName"));
+		user.setfName((String) out.get("_fname"));
+		user.setmName((String) out.get("_mname"));
+		user.setlName((String) out.get("_lname"));
 		user.setEmail((String) out.get("_email"));
 		user.setContact((String) out.get("_contact"));
 		Location loc = new Location();
@@ -54,7 +54,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		loc.setCity((String) out.get("_city"));
 		loc.setState((String) out.get("_province"));
 		loc.setZip((String) out.get("_zip"));
-
+		user.setLocation(loc);
 		return user;
 	}
 	
@@ -78,9 +78,13 @@ public class RegistrationServiceImpl implements RegistrationService {
 		SimpleJdbcCall registerJdbcCall =  new SimpleJdbcCall(dataSource).withProcedureName("registerUser");
 		
 		Map<String, Object> inputData = new HashMap<String, Object>();
+		
 		inputData.put("_username", user.getUsername());
 		inputData.put("_pwd", user.getPassword());
 		inputData.put("_authority", "ROLE_USER");
+		inputData.put("_fName", user.getfName());
+		inputData.put("_mName", user.getmName());
+		inputData.put("_lName", user.getlName());
 		inputData.put("_email", user.getEmail());
 		inputData.put("_country", user.getLocation().getCountry());
 		inputData.put("_province", user.getLocation().getState());
@@ -105,6 +109,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 		
 		Map<String, Object> inputData = new HashMap<String, Object>();
 		inputData.put("_username", user.getUsername());
+		inputData.put("_fName", user.getfName());
+		inputData.put("_mName", user.getmName());
+		inputData.put("_lName", user.getlName());
 		inputData.put("_email", user.getEmail());
 		inputData.put("_country", user.getLocation().getCountry());
 		inputData.put("_province", user.getLocation().getState());
@@ -126,7 +133,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		SqlParameterSource in = new MapSqlParameterSource().addValue("_username", userName);
 		Map<String, Object> out = getUserDetailsJdbcCall.execute(in);
 
-		return (byte[])out.get("_profilePic");
+		return (byte[])out.get("_profilepic");
 	}
 	
 	

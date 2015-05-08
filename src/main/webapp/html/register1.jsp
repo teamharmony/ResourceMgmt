@@ -44,7 +44,7 @@
 								<div class="col-xs-9">
 									<input id="imgInp" type="file" name="profilePic" accept="image/*" capture="camera">
 								</div>
-								<div class="col-xs-3 reg_picture"><img id="imgDisp" src="../img/defaultImg.png" alt=""/></div>
+								<div class="col-xs-3 reg_picture"><img id="imgDisp" src="<c:url value='/img/defaultImg.png'/>" alt=""/></div>
 							</div>
 						</div>
 						<button type="submit" onclick="fnRegCont()">CONTINUE</button>       

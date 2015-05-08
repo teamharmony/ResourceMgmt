@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import prj.resources.mgmt.services.MailNotifier;
 import prj.resources.mgmt.services.RegistrationService;
 
 @RequestMapping("/resendPassword")
@@ -13,6 +14,9 @@ import prj.resources.mgmt.services.RegistrationService;
 public class PasswordGenerationController {
 	@Autowired
 	RegistrationService registrationService;
+	
+	@Autowired
+	MailNotifier mailNotifier;
 		
 	@RequestMapping(method = RequestMethod.POST)
 	public String resendPassword(@RequestParam("username") String username) {
@@ -23,7 +27,7 @@ public class PasswordGenerationController {
 		
 		registrationService.updatePwd(username, newPassword);
 		
-		//Send an email through Spring EMAIL 
+		mailNotifier.sendPasswordInEmail(email, newPassword); 
 		
 		return "redirect:html/login";
 	}

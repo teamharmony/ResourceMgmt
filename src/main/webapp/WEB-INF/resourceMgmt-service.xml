@@ -9,7 +9,15 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 		
-	
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="localhost"></property>
+		<property name="port" value="25"></property>
+		<property name="username" value="teamharmony"></property>
+		<property name="password" value="passw0rd"></property>
+	</bean> 
 
+	<bean id="mailNotifier" class="prj.resources.mgmt.services.MailNotifier">
+		<property name="mailSender" ref="mailSender"></property>
+	</bean>
 
 </beans>

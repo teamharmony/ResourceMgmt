@@ -32,8 +32,8 @@
 	        <div class="col-sm-12 text-center forgotpassword titlemd">Forgot Password</div>
 	        
 	        <div class="col-sm-12 text-center forgotpass1form">
-	        	<form>
-					<input id="forgot" type="text" placeholder="ENTER YOUR USERNAME">
+	        	<form method="POST" action="<c:url value='/resendPassword'/>">
+					<input id="forgot" name="username" type="text" placeholder="ENTER YOUR USERNAME">
 					<button type="submit" onclick="fnForgotPass()">SEND RESET INFO</button>
 	            </form>
 	        
