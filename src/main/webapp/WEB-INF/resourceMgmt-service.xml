@@ -5,6 +5,11 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-	<bean id="registrationService" class="prj.resources.mgmt.services.RegistrationServiceImpl" />
+	<bean id="registrationService" class="prj.resources.mgmt.services.RegistrationServiceImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+		
+	
+
 
 </beans>

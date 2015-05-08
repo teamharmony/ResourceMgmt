@@ -1,25 +1,37 @@
 package prj.resources.mgmt;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import prj.resources.mgmt.domain.Location;
 import prj.resources.mgmt.domain.User;
 import prj.resources.mgmt.services.RegistrationService;
 
+
+
 @Controller
 public class ResourceController {
 
 	@Autowired
 	RegistrationService registrationService;
+	
 
+	
 	//TODO: Can use the ModelAttribute from Spring to bind the params to the User domain object,
 	//TODO: Need a common validator end-point Which can be utilized by both client and mid tier.
+	
 	/**
 	 * Registers a new user
 	 * @param fName
@@ -46,24 +58,53 @@ public class ResourceController {
 			@RequestParam(required = true, value = "state") String state,
 			@RequestParam(required = true, value = "country") String country,
 			@RequestParam(required = true, value = "zipCode") String zipCode,
-			@RequestParam(required = true, value = "contact") String contact,
+			@RequestParam(required = true, value = "contact") String contact,			
 			@RequestParam(required = true, value = "username") String username,
 			@RequestParam(required = true, value = "email") String email,
 			@RequestParam(required = true, value = "password") String password,
-			@RequestParam(required = true, value = "confirmPass") String confirmPass,
-			@RequestParam(required = false, value = "profilePic") MultipartFile profilPic
-	) {
-		User user = new User();
-		Location loc = new Location();
-		user.setLocation(loc);
+			@RequestParam(required = false, value = "confirmPass") String confirmPass,
+			@RequestParam(required = false, value = "profilePic") MultipartFile profilePic) {
+	
 		try {
+			//TODO: USE Builder pattern later
+			User user = new User();
+			user.setfName(fName);
+			user.setmName(mName);
+			user.setlName(lName);
+			user.setContact(contact);
+			user.setEmail(email);
+			user.setUsername(username);
+			user.setPassword(password);
+			Location loc = new Location();
+			loc.setCountry(country);
+			loc.setCity(city);
+			loc.setState(state);
+			loc.setZip(zipCode);
+			user.setLocation(loc);
+			
+			if(profilePic != null && !profilePic.isEmpty()) {
+				user.setProfilePic(profilePic.getBytes());
+			}
 			registrationService.register(user);
 		} catch (Exception e) {
 			// TODO: handle exception
+			//Add individual attributes so that the fields appear pre-populated incase of an exception. 
 			return "registration";
 		}
+		
 		return "redirect:html/login";
 	}
+	
+	
+	@RequestMapping(value="/resources/{username}", method = RequestMethod.GET)
+	public String getUser(@PathVariable("username") String username, Model model) {
+		User user = registrationService.getUserDetailsByName(username);
+		model.addAttribute("user", user);
+		return "edit";
+	}
+	
+	
+
 	
 	/**
 	 * Updates the details for a given user
@@ -79,7 +120,7 @@ public class ResourceController {
 	 * @param profilPic
 	 */
 	@RequestMapping(value="/resources/{username}", method = RequestMethod.PUT)
-	public void registerNewUser(
+	public String updateUser(
 			@PathVariable("username") String username,
 			@RequestParam(required = true, value = "fName") String fName,
 			@RequestParam(required = true, value = "mName") String mName,
@@ -88,11 +129,45 @@ public class ResourceController {
 			@RequestParam(required = true, value = "state") String state,
 			@RequestParam(required = true, value = "country") String country,
 			@RequestParam(required = true, value = "zipCode") String zipCode,
+			@RequestParam(required = false, value = "email") String email,
 			@RequestParam(required = true, value = "contact") String contact,
-			@RequestParam(required = false, value = "profilePic") MultipartFile profilPic
+			@RequestParam(required = false, value = "profilePic") MultipartFile profilePic
 	) {
 		
-		//TODO
+		try {
+			//TODO: USE Builder pattern later
+			User user = new User();
+			user.setfName(fName);
+			user.setmName(mName);
+			user.setlName(lName);
+			user.setContact(contact);
+			user.setEmail(email);
+			Location loc = new Location();
+			loc.setCountry(country);
+			loc.setCity(city);
+			loc.setState(state);
+			loc.setZip(zipCode);
+			user.setLocation(loc);
+			
+			if(profilePic != null && !profilePic.isEmpty()) {
+				user.setProfilePic(profilePic.getBytes());
+			}
+			user.setUsername(username);
+			registrationService.update(user);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return "redirect:html/home";
+		
+
 	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/resources/{userName}/profilePic", method=RequestMethod.GET)
+	public byte[] getProfilePic(String userName){
+		return registrationService.getProfilePic(userName);
+	}
+	
 
 }

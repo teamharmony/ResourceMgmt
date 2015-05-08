@@ -56,6 +56,9 @@ create table authorities (
 	) engine=InnoDB;
 
 create table user_details(
+	fName varchar(30) not null,
+	mName varchar(30) not null,
+	lName varchar(30) not null,
 	username varchar(12) not null,
 	email varchar(30) not null,
 	country varchar(30) not null,
@@ -63,13 +66,13 @@ create table user_details(
 	province varchar(30) not null,
 	zip varchar(10) not null,
 	contact varchar(15) not null,
-	profilePic longblob,
+	profilePic blob,
 	foreign key(username) references users(username)
 	) engine=InnoDB;
 
 
 
-EXAMPLE: call registerUser("admin", "admin123", "ROLE_USER", "admin@somedomain.com", "India", "Pune", "Maharashtra", "411040", "+919822455787", null);
+
 
 
 drop procedure registerUser;		
@@ -77,13 +80,16 @@ delimiter //
 create procedure registerUser(IN _username varchar(12), 
 						IN _pwd varchar(32),
 						IN _authority varchar(10),
+						IN _fName varchar(30),
+						IN _mName varchar(30),
+						IN _lName varchar(30),
 						IN _email varchar(30), 
 						IN _country varchar(30), 
 						IN _city varchar(30), 
 						IN _province varchar(30), 
 						IN _zip varchar(10),
 						IN _contact varchar(15),
-						IN _profilePic longblob						
+						IN _profilePic blob						
 						)
 begin 
 	
@@ -101,8 +107,8 @@ begin
 	start transaction;
 		insert into users(username, password) values(_username, md5(_pwd));
 		insert into authorities (username, authority) values(_username, _authority);
-		insert into user_details (username, email, country, city, province, zip, contact, profilePic) 
-			values(_username, _email, _country, _city, _province, _zip, _contact, _profilePic);
+		insert into user_details (username, fName, mName, lName, email, country, city, province, zip, contact, profilePic) 
+			values(_username, _fName, _mName, _lName, _email, _country, _city, _province, _zip, _contact, _profilePic);
 	commit;
 
 
@@ -110,18 +116,20 @@ end//
 delimiter ;
 
 
-EXAMPLE: call updateUser("admin", "changedEmail@somedomain.com", "IN", "PUNE", "MAHARASHTRA", "411040", "020-201455", null); 
 
 drop procedure updateUser;
 delimiter //
 create procedure updateUser(IN _username varchar(12), 
+						IN _fName varchar(30),
+						IN _mName varchar(30),
+						IN _lName varchar(30),
 						IN _email varchar(30), 
 						IN _country varchar(30), 
 						IN _city varchar(30), 
 						IN _province varchar(30), 
 						IN _zip varchar(10),
 						IN _contact varchar(15),
-						IN _profilePic longblob)
+						IN _profilePic blob)
 begin 
 
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -133,7 +141,7 @@ begin
 	END;
 	
 	update user_details
-		set username = _username, email = _email, country = _country,
+		set username = _username, fName = _fName, mName = _mName, lName = _lName, email = _email, country = _country,
 			city = _city, province = _province, zip = _zip, contact = _contact, profilePic = _profilePic
 			where username = _username;
 end//
@@ -158,14 +166,41 @@ begin
 end//
 delimiter ;
 
-drop procedure isUserAvailable;
+
+drop procedure getUserDetails;
 delimiter //
-create procedure isUserAvailable(IN _username varchar(12))
+create procedure getUserDetails(IN _username varchar(12),
+						OUT _fName varchar(30),
+						OUT _mName varchar(30),
+						OUT _lName varchar(30),
+						OUT _email varchar(30), 
+						OUT _country varchar(30), 
+						OUT _city varchar(30), 
+						OUT _province varchar(30), 
+						OUT _zip varchar(10),
+						OUT _contact varchar(15)
+						
+
+)
 begin 
-	select * from users
+	select fName, mName, lName, email, country, city, province, zip, contact into  
+		_fName, _mName, _lName, _email, _country, _city, _province, _zip, _contact
+			from users
 			where username = _username;
 end//
 delimiter ;
 
 
+
+drop procedure getUserProfilePic;
+delimiter //
+create procedure getUserProfilePic(IN _username varchar(12),
+						OUT _profilePic blob
+)
+begin 
+	select profilePic into _profilePic
+		from users
+			where username = _username;
+end//
+delimiter ;
 

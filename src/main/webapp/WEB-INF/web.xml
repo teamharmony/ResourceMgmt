@@ -50,20 +50,31 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<jsp-file>/index.jsp</jsp-file>
 	</servlet>
 
+	<servlet>
+		<servlet-name>forgot</servlet-name>
+		<jsp-file>/html/forgot.jsp</jsp-file>
+	</servlet>
 
 	<servlet>
 		<servlet-name>registration</servlet-name>
 		<jsp-file>/html/register1.jsp</jsp-file>
 	</servlet>
+	
 	<servlet>
 		<servlet-name>login</servlet-name>
 		<jsp-file>/html/login.jsp</jsp-file>
 	</servlet>
+	
 	<servlet>
 		<servlet-name>home</servlet-name>
 		<jsp-file>/html/home.jsp</jsp-file>
 	</servlet>
 
+
+	<servlet-mapping>
+		<servlet-name>forgot</servlet-name>
+		<url-pattern>/html/forgot</url-pattern>
+	</servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>home</servlet-name>

@@ -2,7 +2,7 @@ package prj.resources.mgmt.domain;
 
 public class Location {
 	private String country;
-	private String province;
+	private String state;
 	private String City;
 	private String zip;
 	/**
@@ -20,14 +20,14 @@ public class Location {
 	/**
 	 * @return the province
 	 */
-	public String getProvince() {
-		return province;
+	public String getState() {
+		return state;
 	}
 	/**
 	 * @param province the province to set
 	 */
-	public void setProvince(String province) {
-		this.province = province;
+	public void setState(String state) {
+		this.state = state;
 	}
 	/**
 	 * @return the city
