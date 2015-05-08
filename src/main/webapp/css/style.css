@@ -392,3 +392,11 @@ body,html
 	padding-left: 30px;
 	padding-top: 8px;
 }
+
+/* Home Screen CSS start */
+.homescreen
+{
+	background:#00A2D8;
+	min-height:100%;
+}
+/* Home Screen CSS end */
