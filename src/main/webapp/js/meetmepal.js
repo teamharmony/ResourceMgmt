@@ -1,52 +1,46 @@
-/*
-function fnLogin (){
-	if( document.getElementById("userId").value === "admin" && document.getElementById("password").value === "admin"){
-		alert("Login Successful");
-	} else {
-		alert("Invalid User name and Password");
-	}
-};
-*/
-
+//Registeration Page
 function fnRegCont(){
 	var fName = document.getElementById("fName").value,
 		mName = document.getElementById("mName").value,
 		lName = document.getElementById("lName").value,
 		city = document.getElementById("city").value,
+		state = document.getElementById("state").value,
+		country = document.getElementById("country").value,
+		zipcode = document.getElementById("zipcode").value,
 		contact = document.getElementById("contact").value;
 		
-	if(fName !== "" && mName !== "" && lName !== "" && city !== "" && contact !== ""){
+	if(fName !== "" && mName !== "" && lName !== "" && city !== "" && state !== ""  && country !== "" && zipcode !== "" && contact !== ""){
 		document.getElementById('registrationscreenpart1').style.display = 'none';
 		document.getElementById('registrationscreenpart2').style.display = 'block';
 	}
 	
 };
 
-function fnRegConfirm(){
-	var username = document.getElementById("username").value,
-		email = document.getElementById("email").value
-		password = document.getElementById("password").value,
-		confirmPass = document.getElementById("confirmPass").value,
-		captcha = document.getElementById("captcha").value;
+function checkForm(form)
+{	
+	if(!validateCaptcha()){
+		document.getElementById('errorMsg').style.display = "block";
+		document.getElementById('errorMsg').innerHTML = "Invalid Captcha !!";
+		form.captcha.focus();
+		return false;
+	}
 	
-	if(validateCaptcha()){
-		if(username !== "" && email !== "" && password !== "" && confirmPass !== "" && captcha !== ""){
-			//alert("Registration Successful.");
+	if(form.password.value != "" && form.password.value == form.confirmPass.value) {
+		if(form.password.value.length < 6) {
+			document.getElementById('errorMsg').style.display = "block"
+			document.getElementById('errorMsg').innerHTML = "Password must contain at least six characters!";
+			form.password.focus();
+			return false;
 		}
 	} else {
-		alert("Invalid Captcha");
+		document.getElementById('errorMsg').style.display = "block"
+		document.getElementById('errorMsg').innerHTML = "Please check that password and confirmed password are same!";
+		form.password.focus();
+		return false;
 	}
-	
-};
 
-function fnCheckPass(){
-	var pass = document.getElementById("password").value,
-		confPass = document.getElementById("confirmPass").value;
-		
-	if(pass != confPass){
-		alert("Password and Confirm Password needs to be same.");
-	}
-};
+  return true;
+}
 
 function fnForgotPass(){
 	var forgot = document.getElementById("forgot").value;
@@ -86,10 +80,9 @@ function drawCaptcha()
 // Validate the Entered input aganist the generated security code function   
 function validateCaptcha(){
 	var str1 = removeSpaces(document.getElementById('txtCaptcha').value);
-	var str2 = removeSpaces(document.getElementById('txtInput').value);
-	if (str1 == str2) return true;        
-	return false;
-	
+	var str2 = removeSpaces(document.getElementById('captcha').value);
+	if (str1 == str2)
+		return true; 	
 }
 
 // Remove the spaces from the entered and generated code

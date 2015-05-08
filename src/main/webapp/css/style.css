@@ -392,6 +392,11 @@ body,html
 	padding-left: 30px;
 	padding-top: 8px;
 }
+.registrationscreen .error
+{
+	color: red;
+	padding-top: 10px;
+}
 
 /* Home Screen CSS start */
 .homescreen

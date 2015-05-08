@@ -25,7 +25,7 @@
 <body onload="drawCaptcha()">
 	<!----------------Register part1 screen----------------->
 	<div class="container registrationscreen">
-		<form method="POST" action="<c:url value='/resources'/>" enctype="multipart/form-data" >
+		<form method="POST" action="<c:url value='/resources'/>" enctype="multipart/form-data" onsubmit="return checkForm(this);">
 			<div class="row" id="registrationscreenpart1">
 				<div class="col-sm-12 text-center title">Registration</div>
 				<div class="col-sm-12 text-center registration titlemd">Personal Information</div>
@@ -44,7 +44,7 @@
 								<div class="col-xs-9">
 									<input id="imgInp" type="file" name="profilePic" accept="image/*" capture="camera">
 								</div>
-								<div class="col-xs-3 reg_picture"><img id="imgDisp" src="../img/defaultImg.jpg" alt=""/></div>
+								<div class="col-xs-3 reg_picture"><img id="imgDisp" src="../img/defaultImg.png" alt=""/></div>
 							</div>
 						</div>
 						<button type="submit" onclick="fnRegCont()">CONTINUE</button>       
@@ -59,19 +59,20 @@
 						<div class="textbox">
 							<input id="username" name="username" type="text" placeholder="USER NAME *" required>
 							<input id="email" name="email" type="text" placeholder="EMAIL *" required>
-							<input id="password" name="password" type="text" placeholder="PASSWORD *"  required onfocusout="fnCheckPass()">
-							<input id="confirmPass" name="confirmPass" type="text" placeholder="CONFIRM PASSWORD *"  required onfocusout="fnCheckPass()">
+							<input id="password" name="password" type="text" placeholder="PASSWORD *"  required>
+							<input id="confirmPass" name="confirmPass" type="text" placeholder="CONFIRM PASSWORD *"  required>
 							<div class="row">
-								<div class="col-xs-8"> <input id="captcha" type="text" placeholder="CAPTCHA *" class="noborder"  required></div>
+								<div class="col-xs-8"> <input id="captcha" type="text" placeholder="CAPTCHA *" class="noborder" onfocusout="validateCaptcha()" required></div>
 								<div class="col-xs-4">
-									<input type="text" id="txtCaptcha" readonly style="background-image:url(../img/captcha.png); text-align:center; border:none; font-size:32px;
+									<input type="text" id="txtCaptcha" readonly tabindex="-1" style="background-image:url(../img/captcha.png); text-align:center; border:none; font-size:32px;
 											font-weight:bold; font-family:Modern;"/> 
 								</div>
 							</div>
 						</div>
-						<input type="submit" onclick="fnRegConfirm()">REGISTER</button>
+						<button type="submit">REGISTER</button>
 				</div>
 			</div>
+			<div class="col-sm-12 text-center error" id="errorMsg" style="display:none"></div>
 		</form>
 	</div>
    
