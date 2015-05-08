@@ -64,7 +64,7 @@
 							<div class="row">
 								<div class="col-xs-8"> <input id="captcha" type="text" placeholder="CAPTCHA *" class="noborder" onfocusout="validateCaptcha()" required></div>
 								<div class="col-xs-4">
-									<input type="text" id="txtCaptcha" readonly tabindex="-1" style="background-image:url(../img/captcha.png); text-align:center; border:none; font-size:32px;
+									<input type="text" id="txtCaptcha" readonly tabindex="-1" style="background-image:<c:url value='/img/captcha.png'/>; text-align:center; border:none; font-size:32px;
 											font-weight:bold; font-family:Modern;"/> 
 								</div>
 							</div>
