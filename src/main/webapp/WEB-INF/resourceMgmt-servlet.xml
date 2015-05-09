@@ -9,10 +9,14 @@
 
 
 	<context:component-scan base-package="prj.resources.mgmt, prj.resources.mgmt.services" />
-
-
+	
+	<mvc:resources location="/css/" mapping="/css/**"/>
+	<mvc:resources location="/img/" mapping="/img/**"/>
+	<mvc:resources location="/js/" mapping="/js/**"/>
+	<mvc:resources location="/fonts/" mapping="/fonts/**"/>
+	
 	<mvc:annotation-driven>
-	  	<mvc:message-converters>
+		<mvc:message-converters>
 	        <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
 	            <property name="supportedMediaTypes">
 	                <list>
@@ -26,7 +30,7 @@
 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/html/" />
-		<property name="suffix" value=".jsp" />
+		<!-- <property name="suffix" value=".jsp" />-->
 	</bean>
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

@@ -21,7 +21,7 @@ import prj.resources.mgmt.domain.User;
 import prj.resources.mgmt.services.RegistrationService;
 
 
-
+@RequestMapping("/resources")
 @Controller
 public class ResourceController {
 
@@ -97,6 +97,12 @@ public class ResourceController {
 		return "redirect:html/login";
 	}
 	
+	@RequestMapping(method= RequestMethod.GET)
+	public String defaultGet() {
+		return "/registration";
+		
+	}
+	
 	
 	@RequestMapping(value="/{username}", method = RequestMethod.GET)
 	public String getUser(@PathVariable("username") String username, Model model) {
@@ -122,7 +128,7 @@ public class ResourceController {
 	 * @param profilPic
 	 */
 	//TODO: Should have been PUT but since HTML forms only support POST/GET we have no alternative
-	@RequestMapping(value="/{username}", method = RequestMethod.POST, params="_method=put")
+	@RequestMapping(value="/{username}", method = RequestMethod.POST)
 	public String updateUser(
 			@PathVariable("username") String username,
 			@RequestParam(required = true, value = "fName") String fName,
@@ -159,7 +165,7 @@ public class ResourceController {
 			registrationService.update(user);
 		} catch (Exception e) {
 			// TODO: handle exception
-			return "hello";
+			//return "hello";
 		}
 		return "redirect:/html/home";
 		

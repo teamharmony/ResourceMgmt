@@ -9,8 +9,9 @@
 
 	<http auto-config="true">
 		<intercept-url pattern="/html/home" access="ROLE_USER" />
-		<intercept-url pattern="/resources" access="ROLE_ANONYMOUS" />
+		<intercept-url pattern="/resources"   access="ROLE_ANONYMOUS" />
 		<intercept-url pattern="/resources/*" access="ROLE_USER" />
+		
 		<form-login login-page="/html/login" default-target-url="/html/home"
 			authentication-failure-url="/html/login?error=true" />
 		<logout invalidate-session="true" logout-success-url="/html/login" />
