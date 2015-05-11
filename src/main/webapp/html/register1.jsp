@@ -59,8 +59,8 @@
 						<div class="textbox">
 							<input id="username" name="username" type="text" placeholder="USER NAME *" required>
 							<input id="email" name="email" type="text" placeholder="EMAIL *" required>
-							<input id="password" name="password" type="text" placeholder="PASSWORD *"  required>
-							<input id="confirmPass" name="confirmPass" type="text" placeholder="CONFIRM PASSWORD *"  required>
+							<input id="password" name="password" type="password" placeholder="PASSWORD *"  required>
+							<input id="confirmPass" name="confirmPass" type="password" placeholder="CONFIRM PASSWORD *"  required>
 							<div class="row">
 								<div class="col-xs-8"> <input id="captcha" type="text" placeholder="CAPTCHA *" class="noborder" onfocusout="validateCaptcha()" required></div>
 								<div class="col-xs-4">
