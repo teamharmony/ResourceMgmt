@@ -104,7 +104,7 @@ public class ResourceController {
 	}
 	
 	
-	@RequestMapping(value="/{username}", method = RequestMethod.GET)
+	@RequestMapping(value="/{username:.+}", method = RequestMethod.GET)
 	public String getUser(@PathVariable("username") String username, Model model) {
 		User user = registrationService.getUserDetailsByName(username);
 		model.addAttribute("user", user);
