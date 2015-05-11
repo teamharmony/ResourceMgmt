@@ -18,6 +18,7 @@
 	-->
 	
      <!-- SET default mail properties -->
+     <!-- 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.gmail.com"/>
         <property name="port" value="25"/>
@@ -32,6 +33,21 @@
             </props>
         </property>
     </bean>	
+    -->
+    
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="port" value="587" />
+        <property name="username" value="feedback4mmp@gmail.com"/>
+        <property name="password" value="teamharmony"/>
+	 
+		<property name="javaMailProperties">
+		   <props>
+	       	      <prop key="mail.smtp.auth">true</prop>
+	       	      <prop key="mail.smtp.starttls.enable">true</prop>
+	       	   </props>
+		</property>
+	</bean>
 
 	<bean id="mailNotifier" class="prj.resources.mgmt.services.MailNotifier">
 		<property name="mailSender" ref="mailSender"></property>

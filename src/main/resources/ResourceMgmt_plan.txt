@@ -150,7 +150,7 @@ begin
 	
 	update user_details
 		set username = _username, fName = _fName, mName = _mName, lName = _lName, email = _email, country = _country,
-			city = _city, province = _province, zip = _zip, contact = _contact, profilePic = _profilePic
+			city = _city, province = _province, zip = _zip, contact = _contact
 			where username = _username;
 			
 		if _profilePic is not null then
