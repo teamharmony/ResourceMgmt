@@ -63,7 +63,8 @@ create table user_details(
 	mName varchar(30) not null,
 	lName varchar(30) not null,
 	username varchar(12) not null,
-	email varchar(30) not null,
+	email varchar(60) not null,
+	skill varchar(120) not null,
 	country varchar(30) not null,
 	city varchar(30) not null,
 	province varchar(30) not null,
@@ -86,6 +87,7 @@ create procedure registerUser(IN _username varchar(12),
 						IN _fName varchar(30),
 						IN _mName varchar(30),
 						IN _lName varchar(30),
+						IN _skill varchar(120),
 						IN _email varchar(30), 
 						IN _country varchar(30), 
 						IN _city varchar(30), 
@@ -110,8 +112,8 @@ begin
 	start transaction;
 		insert into users(username, password) values(_username, md5(_pwd));
 		insert into authorities (username, authority) values(_username, _authority);
-		insert into user_details (username, fName, mName, lName, email, country, city, province, zip, contact) 
-			values(_username, _fName, _mName, _lName, _email, _country, _city, _province, _zip, _contact);
+		insert into user_details (username, fName, mName, lName, email, skill, country, city, province, zip, contact) 
+			values(_username, _fName, _mName, _lName, _email, _skill, _country, _city, _province, _zip, _contact);
 			
 		if _profilePic is not null then
 			update user_details
@@ -131,7 +133,8 @@ create procedure updateUser(IN _username varchar(12),
 						IN _fName varchar(30),
 						IN _mName varchar(30),
 						IN _lName varchar(30),
-						IN _email varchar(30), 
+						IN _email varchar(30),
+						IN _skill varchar(120),
 						IN _country varchar(30), 
 						IN _city varchar(30), 
 						IN _province varchar(30), 
@@ -149,7 +152,7 @@ begin
 	END;
 	
 	update user_details
-		set username = _username, fName = _fName, mName = _mName, lName = _lName, email = _email, country = _country,
+		set username = _username, fName = _fName, mName = _mName, lName = _lName, email = _email, skill = _skill, country = _country,
 			city = _city, province = _province, zip = _zip, contact = _contact
 			where username = _username;
 			
@@ -188,6 +191,7 @@ create procedure getUserDetails(IN _username varchar(12),
 						OUT _mName varchar(30),
 						OUT _lName varchar(30),
 						OUT _email varchar(30), 
+						OUT _skill varchar(120),
 						OUT _country varchar(30), 
 						OUT _city varchar(30), 
 						OUT _province varchar(30), 
@@ -197,8 +201,8 @@ create procedure getUserDetails(IN _username varchar(12),
 
 )
 begin 
-	select fName, mName, lName, email, country, city, province, zip, contact into  
-		_fName, _mName, _lName, _email, _country, _city, _province, _zip, _contact
+	select fName, mName, lName, email, skill, country, city, province, zip, contact into  
+		_fName, _mName, _lName, _email, _skill, _country, _city, _province, _zip, _contact
 			from user_details
 			where username = _username;
 end//
