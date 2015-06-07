@@ -10,13 +10,22 @@
 
 	<context:component-scan base-package="prj.resources.mgmt, prj.resources.mgmt.services" />
 	
+	<!-- We do not have these resources as a part of WEB project, hence commented -->
+	<!-- 
 	<mvc:resources location="/css/" mapping="/css/**"/>
 	<mvc:resources location="/img/" mapping="/img/**"/>
 	<mvc:resources location="/js/" mapping="/js/**"/>
 	<mvc:resources location="/fonts/" mapping="/fonts/**"/>
-	
+	 -->
+	 <mvc:resources location="/html/" mapping="/html/**"/>
+	<mvc:resources location="/js/" mapping="/js/**"/>
+	 
 	<mvc:annotation-driven>
 		<mvc:message-converters>
+			<!-- Used to marshall JSON response -->
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+			
+			<!-- Used for Pic upload functionality-->
 	        <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter">
 	            <property name="supportedMediaTypes">
 	                <list>
@@ -28,15 +37,14 @@
 	    </mvc:message-converters>	
 	</mvc:annotation-driven>
 
+	<!-- No need of a Web Resolver as we do not have any views rendered by Spring MVC -->
+	<!-- 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/html/" />
-		<!-- <property name="suffix" value=".jsp" />-->
+		<property name="suffix" value=".jsp" />
 	</bean>
-
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-	</bean>
-
-
-
-
+	 -->
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
+	
 </beans>

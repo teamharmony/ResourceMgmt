@@ -1,5 +1,7 @@
 package prj.resources.mgmt.services;
 
+import java.util.List;
+
 import prj.resources.mgmt.domain.User;
 
 //TODO: DAO Exception
@@ -48,5 +50,21 @@ public interface RegistrationService {
 	 * @param pwd
 	 * @return
 	 */
-	public void updatePwd(String userName, String pwd);
+	public void updatePwd(String userName, String pwd, int reset);
+	
+	
+	/**
+	 * lets the client know if the password for a given user needs to be reset.
+	 * @param userName
+	 * @return
+	 */
+	public int isPasswordResetNeeded(String userName);
+	
+	/**
+	 * search by city|skill
+	 * @param key
+	 * @return
+	 */
+	public List<User> findUsers(String key, String searchString);
+	
 }

@@ -33,6 +33,38 @@ Some syntax
 	--else
 		commit;
 	--end if;
+
+
+
+drop table skills;
+create table skills(
+	skill varchar(100) not null,
+	skillId smallint
+) engine=InnoDB; 
+
+insert into skills values(1, "HTML");
+insert into skills values(2, "JavaScript");
+insert into skills values(3, "CSS");
+insert into skills values(4, "JAVA");
+insert into skills values(5, "PHP");
+insert into skills values(6, "RUBY");
+insert into skills values(7, "JAVA-Based-Scripts");
+insert into skills values(8, "C#");
+insert into skills values(9, "C");
+insert into skills values(10, "C++");
+insert into skills values(11, "MySQL");
+insert into skills values(12, "Oracle");
+insert into skills values(13, "IBM Products");
+insert into skills values(14, "Others");
+
+
+create table user_skills(
+	username varchar(12) not null, 
+	skillId smallint,
+	primary key()username, skillId),
+	foreign key(username) references users(username),
+	foreign key(skillId) references skills(skillId)
+) engine=innoDB;
 		
 =======================================================================
 back-end details
@@ -47,6 +79,7 @@ drop table users;
 create table users (
 	username varchar(12) not null,
 	password varchar(32) not null,
+	resetpwd smallint,
 	primary key(username)
 	) engine=InnoDB;
 
@@ -74,9 +107,25 @@ create table user_details(
 	foreign key(username) references users(username)
 	) engine=InnoDB;
 
+alter table user_details ADD INDEX city_index (city)
 
 
 
+drop procedure findUserByCity;		
+delimiter //
+create procedure findUserByCity(IN _city varchar(30))
+	begin
+		select * from user_details where city = _city;
+	end//
+delimiter ;
+
+drop procedure findUserBySkill;		
+delimiter //
+create procedure findUserBySkill(IN _skill varchar(120))
+	begin
+		select * from user_details where skill like concat('%', _skill , '%');
+	end//
+delimiter ;
 
 
 drop procedure registerUser;		
@@ -167,7 +216,7 @@ delimiter ;
 drop procedure updatePassword;
 delimiter //
 create procedure updatePassword(IN _username varchar(12), 
-						IN _pwd varchar(32))
+						IN _pwd varchar(32), IN _resetpwd smallint)
 begin 
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
@@ -178,7 +227,7 @@ begin
 	END;
 	
 	update users
-		set password = md5(_pwd)
+		set password = md5(_pwd), resetpwd = _resetpwd
 			where username = _username;
 end//
 delimiter ;
@@ -218,6 +267,15 @@ create procedure getUserProfilePic(IN _username varchar(12),
 begin 
 	select profilePic into _profilePic
 		from user_details
+			where username = _username;
+end//
+delimiter ;
+
+drop procedure isPwdReset;
+delimiter //
+create procedure isPwdReset(IN _username varchar(12), OUT _resetpwd smallint)
+begin 
+		select resetpwd from users
 			where username = _username;
 end//
 delimiter ;

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
+<script>
+		
+		
+		
+		
+		$(document).ready(formSubmission);
+		
+		function formSubmission() {
+			var host = "http://localhost:8080/ResourceMgmt/resources";
+			$( '#createUser' )
+			  .submit( function( e ) {
+			    $.ajax( {
+			      url: host,
+			      type: 'POST',
+			      data: new FormData( $("#createUser")[0] ),
+			      processData: false,
+			      contentType: false
+			    } );
+			    e.preventDefault();
+			  } );
+			
+			//e.preventDefault();
+			/*
+			var host = "http://localhost:8080/ResourceMgmt/resources",
+			fName = $("#fName").val(),
+			mName = $("#mName").val(),
+			lName = $("#lName").val(),
+			contact = $("#contact").val(),
+			userName = $("#userName").val(),
+			password = $("#password").val(),
+			email = $("#email").val(),
+			skills = $("#skills").val(),
+			profilePic = $("#profilePic").val(),
+			city = $("#city").val(),
+			country = $("#country").val(),
+			state = $("#state").val();
+			
+			var profilePicData;
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				profilePicData = e.target.result;
+				makeRequest();
+			};
+			reader.readAsBinaryString($("#profilePic")[0].files[0]);
+			
+			function makeRequest() {
+				$.ajax( host,{
+						headers: { 
+					        'Accept': 'application/json',
+					        'Content-Type': 'application/json' 
+					    },
+				      method: 'POST',
+				      processData: false,
+				      data:  JSON.stringify({"fName": fName, "mName": mName, "profilePic": profilePicData})
+				      } ).done(function(o) { alert(o);});
+			}
+			*/
+		}	
+	
+
+</script>
+
+
+
+<form id="createUser" action="#" >
+	<input type="text" name="fName"></input>
+	<input type="file" name="profilePic"></input>
+	<input type="submit"/>
+</form>
+</body>
+</html>
