@@ -19,7 +19,7 @@
 		//Demo of getAPI
 		function findUsers() {
 			$.ajax( {
-			      	url: host.concat("/resources/hh?searchKey=city&searchString=pune&access_token=" + window.bearerToken),
+			      	url: host.concat("/resources/?searchKey=city&searchString=pune&access_token=" + window.bearerToken),
 			      	type: 'GET'
 		    	}).done(function(o) { alert(o);});
 		}	

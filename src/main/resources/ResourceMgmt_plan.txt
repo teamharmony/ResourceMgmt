@@ -115,7 +115,7 @@ drop procedure findUserByCity;
 delimiter //
 create procedure findUserByCity(IN _city varchar(30))
 	begin
-		select * from user_details where city = _city;
+		select * from user_details where lower(city) = lower(_city);
 	end//
 delimiter ;
 
@@ -123,7 +123,7 @@ drop procedure findUserBySkill;
 delimiter //
 create procedure findUserBySkill(IN _skill varchar(120))
 	begin
-		select * from user_details where skill like concat('%', _skill , '%');
+		select * from user_details where lower(skill) like concat('%', lower(_skill) , '%');
 	end//
 delimiter ;
 

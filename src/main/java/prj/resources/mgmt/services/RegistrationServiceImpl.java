@@ -238,9 +238,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 	public List<User> findUsers(String key, String searchString) {
 		String procName = null;
 		try {
-			if (key == "city")
+			if (key.equals("city"))
 				procName = "findUserByCity";
-			else if (key == "skill")
+			else if (key.equals("skill"))
 				procName = "findUserBySkill";
 
 			SimpleJdbcCall findByCity = new SimpleJdbcCall(dataSource)
@@ -261,6 +261,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 											.email(rs.getString("email"))
 											.skills(rs.getString("skill"))
 											.contact(rs.getString("contact"))
+											.location(l)
 											.build();
 
 									return u;
@@ -268,10 +269,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 							});
 
 			SqlParameterSource in = null;
-			if (key == "city")
+			if (key.equals("city"))
 				in = new MapSqlParameterSource()
 						.addValue("_city", searchString);
-			else if (key == "skill")
+			else if (key.equals("skill"))
 				in = new MapSqlParameterSource().addValue("_skill",
 						searchString);
 
