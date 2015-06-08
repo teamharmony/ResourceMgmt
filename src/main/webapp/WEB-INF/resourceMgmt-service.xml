@@ -29,5 +29,7 @@
 	<bean id="mailNotifier" class="prj.resources.mgmt.services.MailNotifier">
 		<property name="mailSender" ref="mailSender"></property>
 	</bean>
+	
+	<bean id="pwdGenerator" class="prj.resources.mgmt.services.RandomGenerator"/>
 
 </beans>

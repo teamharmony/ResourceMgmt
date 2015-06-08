@@ -121,6 +121,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			inputData.put("_mName", user.getmName());
 			inputData.put("_lName", user.getlName());
 			inputData.put("_email", user.getEmail());
+			inputData.put("_skill", user.getSkills());
 			inputData.put("_country", user.getLocation().getCountry());
 			inputData.put("_province", user.getLocation().getState());
 			inputData.put("_city", user.getLocation().getCity());
@@ -160,6 +161,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			inputData.put("_mName", user.getmName());
 			inputData.put("_lName", user.getlName());
 			inputData.put("_email", user.getEmail());
+			inputData.put("_skill", user.getSkills());
 			inputData.put("_country", user.getLocation().getCountry());
 			inputData.put("_province", user.getLocation().getState());
 			inputData.put("_city", user.getLocation().getCity());

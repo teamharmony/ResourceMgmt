@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body onload="bodyLoaded()">
+<script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="../js/authenticationProxy.js"></script>
+
+
+
+<script>
+		
+		function bodyLoaded() {
+			var authPromise = loginWithPwd("hh", "j");
+			authPromise.done(function(o) {
+				makeAGet();
+			});
+			authPromise.fail(function(o){
+				console.log("auth error");
+			})
+		}
+		
+		function getUserDetailsProxy() {
+			var host = "http://localhost:8080/ResourceMgmt/resources/jj?access_token=" + bearerToken;
+		    return $.ajax( {
+			      	url: host,
+			      	type: 'GET'
+		    	});
+		}	
+
+		function getUserDetails() {
+			var promise = getUserDetailsProxy();
+			promise.fail(function(o){
+				var retPromiseRef;
+				loginWithRefreshToken(getUserDetailsProxy, null, null, retPromiseRef);
+				
+			})
+	    }
+
+</script>
+
+
+
+
+<form id="createUser" action="#" >
+	FirstName <input type="text" name="fName"></input><br/>
+	MiddleName <input type="text" name="mName"></input><br/>
+	LastName <input type="text" name="lName"></input><br/>
+	
+	City <input type="text" name="city"></input><br/>
+	State <input type="text" name="state"></input><br/>
+	Country <input type="text" name="country"></input><br/>
+	Zip <input type="text" name="zipCode"></input><br/>
+	
+	Contact <input type="text" name="contact"></input><br/>
+	userName <input type="text" name="username"></input><br/>
+	password <input type="text" name="password"></input><br/>
+	Email <input type="text" name="email"></input><br/>
+	Skills <input type="text" name="skills"></input><br/>
+	
+	ProfilePic <input type="file" name="profilePic"></input><br/>
+	
+	<input type="submit"/>
+</form>
+</body>
+</html>

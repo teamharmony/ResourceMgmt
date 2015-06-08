@@ -41,7 +41,16 @@
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 	</http>
 
-	<!-- /password/** is not secured.-->
+	<http pattern="/password/**" create-session="never"
+		entry-point-ref="oauthAuthenticationEntryPoint"
+		access-decision-manager-ref="accessDecisionManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<anonymous enabled="true" />
+		<intercept-url pattern="/password/forgot" access="ROLE_ANONYMOUS" />
+		<intercept-url pattern="/password/reset" access="ROLE_USER" />
+		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+		<access-denied-handler ref="oauthAccessDeniedHandler" />
+	</http>
 
 	<bean id="oauthAuthenticationEntryPoint"
 		class="org.springframework.security.oauth2.provider.error.OAuth2AuthenticationEntryPoint">
@@ -82,18 +91,18 @@
 	<authentication-manager alias="authenticationManager" 
 		xmlns="http://www.springframework.org/schema/security">
 		<authentication-provider>
-			 
+			 <!-- 
 			<user-service id="userService">
 				<user name="admin" authorities="ROLE_USER" password="admin" />
 				<user name="guest" authorities="ROLE_USER" password="guest" />
 			</user-service>
-						
-			<!-- 
+			-->	
+			 
 			<password-encoder hash="md5"></password-encoder>
 			<jdbc-user-service data-source-ref="dataSource" users-by-username-query="select 
 				username, password, true as enabled from users where username= ?" authorities-by-username-query="select 
 				users.username, authorities.authority from users, authorities where users.username = ? "/> 
-				-->
+			
 		</authentication-provider>
 	</authentication-manager>
 
@@ -111,6 +120,7 @@
 		<property name="tokenStore" ref="tokenStore" />
 		<property name="supportRefreshToken" value="true" />
 		<property name="clientDetailsService" ref="clientDetails" />
+		<property name="refreshTokenValiditySeconds" value="300"></property>
 	</bean>
 
 	<bean id="userApprovalHandler"
@@ -122,7 +132,7 @@
 	<oauth:authorization-server
 		client-details-service-ref="clientDetails" token-services-ref="tokenServices"
 		user-approval-handler-ref="userApprovalHandler">
-		<!-- <oauth:refresh-token />-->
+		<oauth:refresh-token />
 		<oauth:password />
 	</oauth:authorization-server>
 
@@ -132,9 +142,9 @@
 	<!-- Client Definition -->
 	<oauth:client-details-service id="clientDetails">
 		<oauth:client client-id="meetMePal"
-			authorized-grant-types="password" authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT"
-			scope="read,write,trust" access-token-validity="30000"
-			refresh-token-validity="6000" />
+			authorized-grant-types="password,refresh_token" authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT"
+			scope="read,write,trust" access-token-validity="300" 
+			refresh-token-validity="300"/>
 
 	</oauth:client-details-service>
 

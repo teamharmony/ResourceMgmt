@@ -107,7 +107,7 @@ create table user_details(
 	foreign key(username) references users(username)
 	) engine=InnoDB;
 
-alter table user_details ADD INDEX city_index (city)
+alter table user_details ADD INDEX city_index (city);
 
 
 
