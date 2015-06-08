@@ -64,6 +64,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					.mName((String) out.get("_mname"))
 					.lName((String) out.get("_lname"))
 					.email((String) out.get("_email"))
+					.skills((String) out.get("_skill"))
 					.contact((String) out.get("_contact")).location(loc)
 					.build();
 
@@ -299,8 +300,8 @@ public class RegistrationServiceImpl implements RegistrationService {
 			SqlParameterSource in = new MapSqlParameterSource().addValue(
 					"_username", userName);
 			Map<String, Object> out = getUserDetailsJdbcCall.execute(in);
-
-			return (Integer) out.get("_resetpwd");
+			Integer i = (Integer)out.get("_resetpwd");
+			return i == null ? 0: i.intValue();
 		} catch (DataAccessException e) {
 			SQLException sqe = (SQLException) e.getCause();
 			logger.error("Error While invoking "

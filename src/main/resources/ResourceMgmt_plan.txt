@@ -79,7 +79,7 @@ drop table users;
 create table users (
 	username varchar(12) not null,
 	password varchar(32) not null,
-	resetpwd smallint,
+	resetpwd smallint default 0,
 	primary key(username)
 	) engine=InnoDB;
 
@@ -200,10 +200,58 @@ begin
 		SELECT @full_error;
 	END;
 	
-	update user_details
-		set username = _username, fName = _fName, mName = _mName, lName = _lName, email = _email, skill = _skill, country = _country,
-			city = _city, province = _province, zip = _zip, contact = _contact
-			where username = _username;
+			
+		if _fName is not null then
+			update user_details
+				set fName = _fName where username = _username;
+		end if;
+		
+		if _mName is not null then
+			update user_details
+				set mName = _mName where username = _username;
+		end if;
+		
+		if _lName is not null then
+			update user_details
+				set lName = _lName where username = _username;
+		end if;
+		
+		if _email is not null then
+			update user_details
+				set email = _email where username = _username;
+		end if;
+		
+		if _skill is not null then
+			update user_details
+				set skill = _skill where username = _username;
+		end if;
+		
+		if _country is not null then
+			update user_details
+				set country = _country where username = _username;
+		end if;
+		
+		if _city is not null then
+			update user_details
+				set city = _city where username = _username;
+		end if;
+		
+		if _province is not null then
+			update user_details
+				set province = _province where username = _username;
+		end if;
+		
+		if _zip is not null then
+			update user_details
+				set zip = _zip where username = _username;
+		end if;
+		
+		if _contact is not null then
+			update user_details
+				set contact = _contact where username = _username;
+		end if;
+		
+		
 			
 		if _profilePic is not null then
 			update user_details
@@ -275,7 +323,7 @@ drop procedure isPwdReset;
 delimiter //
 create procedure isPwdReset(IN _username varchar(12), OUT _resetpwd smallint)
 begin 
-		select resetpwd from users
+		select resetpwd into _resetpwd from users
 			where username = _username;
 end//
 delimiter ;

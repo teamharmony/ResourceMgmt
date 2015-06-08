@@ -8,7 +8,7 @@
 		//store the refreshToken in localStorage
 				
 		//This function ensures we always have a valid bearer token.
-		bearerTimeOut = setTimeOut(function(){
+		bearerTimeout = setTimeout(function(){
 			clearTimeout(bearerTimeout);
 			that.loginWithRefreshToken(window.refresh_token);
 		}, o.expiresIn * 60 - 100);
@@ -32,7 +32,7 @@
 	
 	AuthenticationProxy.prototype.loginWithPassword = function(username, password) {
 		return $.ajax( {
-	      	url: this.hostUrl.concat("/oauth/token?grant_type=password&clientId=" + this.clientId + "&username=" + username + "&password=" + password),
+	      	url: this.hostUrl.concat("/oauth/token?grant_type=password&client_id=" + this.clientId + "&username=" + username + "&password=" + password),
 	      	async: false,
 	      	type: 'GET',
 	      	context: this
@@ -41,10 +41,11 @@
 	
 	AuthenticationProxy.prototype.loginWithRefreshToken = function(refreshToken) {
 	    return $.ajax( {
-		      	url: this.hostUrl.concat("/oauth/token?grant_type=refresh_token&clientId=" + this.clientId + "&refresh_token=" + refreshToken),
+		      	url: this.hostUrl.concat("/oauth/token?grant_type=refresh_token&client_id=" + this.clientId + "&refresh_token=" + refreshToken),
 		      	async: false,
-		      	type: 'GET'
-		 }).done(this.loginSuccess).fail(this.refreshTokenFailureCallback);
+		      	type: 'GET',
+		      	context: this
+		 }).done(loginSuccess).fail(this.refreshTokenFailureCallback);
 	}
 	
 	

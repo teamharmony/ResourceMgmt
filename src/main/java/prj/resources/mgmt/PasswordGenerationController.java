@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,13 +35,12 @@ public class PasswordGenerationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/forgot", method = RequestMethod.PUT)
-	public ResponseEntity<?> forgotPassword(
-			@RequestParam("username") String username) {
+	public ResponseEntity<?> forgotPassword(	@RequestBody MultiValueMap<String,String> body) {
 		try {
-			String email = registrationService.getEmailByName(username);
+			String email = registrationService.getEmailByName(body.getFirst("username"));
 
 			String newPassword = pwdGenerator.generatePwd();
-			registrationService.updatePwd(username, newPassword, 1);
+			registrationService.updatePwd(body.getFirst("username"), newPassword, 1);
 
 			mailNotifier.sendPasswordInEmail(email, newPassword);
 		} catch (ResourceError e) {
@@ -57,11 +58,9 @@ public class PasswordGenerationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/reset", method = RequestMethod.PUT)
-	public ResponseEntity<?> resetPassword(
-			@RequestParam("username") String username,
-			@RequestParam("password") String pwd) {
+	public ResponseEntity<?> resetPassword(@RequestBody MultiValueMap<String,String> body) {
 		try {
-			registrationService.updatePwd(username, pwd, 0);
+			registrationService.updatePwd(body.getFirst("username"), body.getFirst("password"), 0);
 		} catch (ResourceError e) {
 			return new ResponseEntity<ResourceError>(e, HttpStatus.CONFLICT);
 		}
@@ -75,8 +74,7 @@ public class PasswordGenerationController {
 	 * @return
 	 */
 	@RequestMapping(value = "/reset", method = RequestMethod.GET)
-	public ResponseEntity<?> isResetNeeded(
-			@RequestParam("username") String username) {
+	public ResponseEntity<?> isResetNeeded(	@RequestParam String username) {
 		int reset = 0;
 		try {
 			reset = registrationService.isPasswordResetNeeded(username);

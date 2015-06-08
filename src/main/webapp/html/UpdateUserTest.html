@@ -4,7 +4,7 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
-<body>
+<body onload="bodyLoaded()">
 <script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
 <script type="text/javascript" src="../js/authenticationProxy.js"></script>
 <script>
@@ -24,7 +24,7 @@
 			    $.ajax( {
 			      url: host.concat("/resources/hh?access_token=" + window.bearerToken),
 			      type: 'POST',
-			      data: new FormData( $("#createUser")[0] ),
+			      data: new FormData( $("#updateUser")[0] ),
 			      processData: false,
 			      contentType: false
 			    } );
@@ -39,10 +39,12 @@
 			      	url: host.concat("/resources/hh?access_token=" + window.bearerToken),
 			      	type: 'GET'
 		    	}).done(function(o) { 
-					$("#fName").value(o.fName);
-					$("#mName").value(o.mName);
-					$("#lName").value(o.lName);
+					$("#fName").val(o.fName);
+					$("#mName").val(o.mName);
+					$("#lName").val(o.lName);
 		    	});
+			
+			
 		}	
 		
 		
@@ -60,7 +62,11 @@
 	MiddleName <input type="text" id="mName" name="mName"></input><br/>
 	LastName <input type="text" id="lName" name="lName"></input><br/>
 	ProfilePic <input type="file" id="profilePic" name="profilePic"></input><br/>
+	Email <input type="text" id="email" name="email"></input><br/>
 	<input type="submit"/>
 </form>
+
+
+
 </body>
 </html>

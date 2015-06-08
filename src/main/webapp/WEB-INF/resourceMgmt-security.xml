@@ -120,7 +120,6 @@
 		<property name="tokenStore" ref="tokenStore" />
 		<property name="supportRefreshToken" value="true" />
 		<property name="clientDetailsService" ref="clientDetails" />
-		<property name="refreshTokenValiditySeconds" value="300"></property>
 	</bean>
 
 	<bean id="userApprovalHandler"
@@ -143,8 +142,8 @@
 	<oauth:client-details-service id="clientDetails">
 		<oauth:client client-id="meetMePal"
 			authorized-grant-types="password,refresh_token" authorities="ROLE_CLIENT, ROLE_TRUSTED_CLIENT"
-			scope="read,write,trust" access-token-validity="300" 
-			refresh-token-validity="300"/>
+			scope="read,write,trust" access-token-validity="3000" 
+			refresh-token-validity="604800"/>
 
 	</oauth:client-details-service>
 
