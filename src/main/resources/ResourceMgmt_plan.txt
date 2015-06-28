@@ -34,6 +34,16 @@ Some syntax
 		commit;
 	--end if;
 
+--	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+--	BEGIN
+--		rollback;
+--		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
+ --		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+--		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
+--		SELECT @full_error;
+--	END;
+
+
 
 
 drop table skills;
@@ -92,40 +102,92 @@ create table authorities (
 
 drop table user_details;
 create table user_details(
-	fName varchar(30) not null,
-	mName varchar(30) not null,
-	lName varchar(30) not null,
+	name varchar(30) not null,
 	username varchar(12) not null,
 	email varchar(60) not null,
 	skill varchar(120) not null,
-	country varchar(30) not null,
-	city varchar(30) not null,
-	province varchar(30) not null,
-	zip varchar(10) not null,
 	contact varchar(15) not null,
 	profilePic longblob,
+	latitude double,
+	longitude double,
+	primary key(email),
 	foreign key(username) references users(username)
 	) engine=InnoDB;
 
-alter table user_details ADD INDEX city_index (city);
 
 
 
-drop procedure findUserByCity;		
+drop procedure updateLocation;		
 delimiter //
-create procedure findUserByCity(IN _city varchar(30))
+create procedure updateLocation(IN _username varchar(12), IN _latitude double, IN _longitude double)
 	begin
-		select * from user_details where lower(city) = lower(_city);
+		update user_details
+			set latitude = _latitude, longitude = _longitude
+				where username = _username;
 	end//
 delimiter ;
+
+
+
+drop procedure findUserByLocation;		
+delimiter //
+create procedure findUserByLocation(IN _latitude1 double, IN _latitude2 double, 
+		IN _longitude1 double, IN _longitude2 double)
+	begin
+		select * from user_details where 
+		(latitude between _latitude1 and _latitude2) and
+		(longitude between _longitude1 and _longitude2);
+	end//
+delimiter ;
+
+
+
 
 drop procedure findUserBySkill;		
 delimiter //
-create procedure findUserBySkill(IN _skill varchar(120))
-	begin
-		select * from user_details where lower(skill) like concat('%', lower(_skill) , '%');
-	end//
+create procedure findUserBySkill(IN skills varchar(120))
+begin
+	DECLARE strLen    INT DEFAULT 0;
+	DECLARE SubStrLen INT DEFAULT 0;
+
+	IF skills IS NULL THEN
+    	SET skills = '';
+  	END IF;
+
+
+	DROP TEMPORARY TABLE IF EXISTS tblResults;
+  	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
+		name varchar(30) not null,
+		username varchar(12) not null,
+		email varchar(60) not null,
+		skill varchar(120) not null,
+		contact varchar(15) not null
+		
+  	);
+  
+
+	do_this:
+  		LOOP
+    		SET strLen = CHAR_LENGTH(skills);
+
+			Insert into tblResults
+			select name, username, email, skill, contact  from user_details where lower(skill) like concat('%', lower(SUBSTRING_INDEX(skills, ',', 1)) , '%');
+
+    	    SET SubStrLen = CHAR_LENGTH(SUBSTRING_INDEX(skills, ',', 1)) + 2;
+    		SET skills = MID(skills, SubStrLen, strLen);
+
+    		IF skills = '' THEN
+      			LEAVE do_this;
+   		 	END IF;
+  
+  		END LOOP do_this;
+
+	select DISTINCT * from tblResults;
+		
+end//
 delimiter ;
+
+
 
 
 drop procedure registerUser;		
@@ -133,36 +195,18 @@ delimiter //
 create procedure registerUser(IN _username varchar(12), 
 						IN _pwd varchar(32),
 						IN _authority varchar(10),
-						IN _fName varchar(30),
-						IN _mName varchar(30),
-						IN _lName varchar(30),
+						IN _name varchar(30),
 						IN _skill varchar(120),
 						IN _email varchar(30), 
-						IN _country varchar(30), 
-						IN _city varchar(30), 
-						IN _province varchar(30), 
-						IN _zip varchar(10),
 						IN _contact varchar(15),
 						IN _profilePic longblob						
 						)
 begin 
-	
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
-	BEGIN
-		rollback;
-		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
- 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
-		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
-		SELECT @full_error;
-	END;
-
-
-
 	start transaction;
 		insert into users(username, password) values(_username, md5(_pwd));
 		insert into authorities (username, authority) values(_username, _authority);
-		insert into user_details (username, fName, mName, lName, email, skill, country, city, province, zip, contact) 
-			values(_username, _fName, _mName, _lName, _email, _skill, _country, _city, _province, _zip, _contact);
+		insert into user_details (username, name, email, skill, contact) 
+			values(_username, _name, _email, _skill, _contact);
 			
 		if _profilePic is not null then
 			update user_details
@@ -179,41 +223,16 @@ delimiter ;
 drop procedure updateUser;
 delimiter //
 create procedure updateUser(IN _username varchar(12), 
-						IN _fName varchar(30),
-						IN _mName varchar(30),
-						IN _lName varchar(30),
+						IN _name varchar(30),
 						IN _email varchar(30),
 						IN _skill varchar(120),
-						IN _country varchar(30), 
-						IN _city varchar(30), 
-						IN _province varchar(30), 
-						IN _zip varchar(10),
 						IN _contact varchar(15),
 						IN _profilePic longblob)
 begin 
-
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
-	BEGIN
-		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
- 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
-		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
-		SELECT @full_error;
-	END;
-	
 			
-		if _fName is not null then
+		if _name is not null then
 			update user_details
-				set fName = _fName where username = _username;
-		end if;
-		
-		if _mName is not null then
-			update user_details
-				set mName = _mName where username = _username;
-		end if;
-		
-		if _lName is not null then
-			update user_details
-				set lName = _lName where username = _username;
+				set name = _name where username = _username;
 		end if;
 		
 		if _email is not null then
@@ -226,32 +245,10 @@ begin
 				set skill = _skill where username = _username;
 		end if;
 		
-		if _country is not null then
-			update user_details
-				set country = _country where username = _username;
-		end if;
-		
-		if _city is not null then
-			update user_details
-				set city = _city where username = _username;
-		end if;
-		
-		if _province is not null then
-			update user_details
-				set province = _province where username = _username;
-		end if;
-		
-		if _zip is not null then
-			update user_details
-				set zip = _zip where username = _username;
-		end if;
-		
 		if _contact is not null then
 			update user_details
 				set contact = _contact where username = _username;
 		end if;
-		
-		
 			
 		if _profilePic is not null then
 			update user_details
@@ -266,14 +263,6 @@ delimiter //
 create procedure updatePassword(IN _username varchar(12), 
 						IN _pwd varchar(32), IN _resetpwd smallint)
 begin 
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION
-	BEGIN
-		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
- 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
-		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
-		SELECT @full_error;
-	END;
-	
 	update users
 		set password = md5(_pwd), resetpwd = _resetpwd
 			where username = _username;
@@ -284,22 +273,14 @@ delimiter ;
 drop procedure getUserDetails;
 delimiter //
 create procedure getUserDetails(IN _username varchar(12),
-						OUT _fName varchar(30),
-						OUT _mName varchar(30),
-						OUT _lName varchar(30),
+						OUT _name varchar(30),
 						OUT _email varchar(30), 
 						OUT _skill varchar(120),
-						OUT _country varchar(30), 
-						OUT _city varchar(30), 
-						OUT _province varchar(30), 
-						OUT _zip varchar(10),
 						OUT _contact varchar(15)
-						
-
 )
 begin 
-	select fName, mName, lName, email, skill, country, city, province, zip, contact into  
-		_fName, _mName, _lName, _email, _skill, _country, _city, _province, _zip, _contact
+	select name,  email, skill,  contact into  
+		_name, _email, _skill, _contact
 			from user_details
 			where username = _username;
 end//

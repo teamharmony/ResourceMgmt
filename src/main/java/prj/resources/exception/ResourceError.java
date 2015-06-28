@@ -1,6 +1,8 @@
-package prj.resources.mgmt.domain;
+package prj.resources.exception;
 
-public class ResourceError extends RuntimeException{
+
+public class ResourceError extends Exception{
+	
 	private final Exception underlyingCause;
 	private String errorString;
 	private int errorCode;
@@ -8,6 +10,7 @@ public class ResourceError extends RuntimeException{
 	public ResourceError(Exception e) {
 		underlyingCause = e;
 	}
+	
 	
 	public Exception getCause() {
 		return underlyingCause;

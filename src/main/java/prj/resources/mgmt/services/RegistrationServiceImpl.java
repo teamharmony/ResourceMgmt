@@ -17,8 +17,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.ParameterizedRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 
+import prj.resources.exception.ResourceError;
 import prj.resources.mgmt.domain.Location;
-import prj.resources.mgmt.domain.ResourceError;
 import prj.resources.mgmt.domain.User;
 
 //TODO: Implement AOP for Logging
@@ -43,8 +43,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 	 * 
 	 * @param userName
 	 * @return
+	 * @throws ResourceError 
 	 */
-	public User getUserDetailsByName(String userName) {
+	public User getUserDetailsByName(String userName) throws ResourceError {
+		User user = null;
 		try {
 			SimpleJdbcCall getUserDetailsJdbcCall = new SimpleJdbcCall(
 					dataSource).withProcedureName("getUserDetails");
@@ -53,32 +55,18 @@ public class RegistrationServiceImpl implements RegistrationService {
 					"_username", userName);
 			Map<String, Object> out = getUserDetailsJdbcCall.execute(in);
 
-			Location loc = new Location();
-			loc.setCountry((String) out.get("_country"));
-			loc.setCity((String) out.get("_city"));
-			loc.setState((String) out.get("_province"));
-			loc.setZip((String) out.get("_zip"));
-
-			User user = new User.UserBuilder().userName(userName)
-					.fName((String) out.get("_fname"))
-					.mName((String) out.get("_mname"))
-					.lName((String) out.get("_lname"))
+			user = new User.UserBuilder().userName(userName)
+					.name((String) out.get("_name"))
 					.email((String) out.get("_email"))
 					.skills((String) out.get("_skill"))
-					.contact((String) out.get("_contact")).location(loc)
+					.contact((String) out.get("_contact"))
 					.build();
 
-			return user;
+			
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
+		return user;
 	}
 
 	/**
@@ -86,29 +74,26 @@ public class RegistrationServiceImpl implements RegistrationService {
 	 * 
 	 * @param userName
 	 * @return
+	 * @throws ResourceError 
 	 */
-	public String getEmailByName(String userName) {
+	public String getEmailByName(String userName) throws ResourceError {
+		User user = null;
 		try {
-			User user = getUserDetailsByName(userName);
-			return user.getEmail();
+			user = getUserDetailsByName(userName);
+			
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
+		return user.getEmail();
 	}
 
 	/**
 	 * Registers a user in the database.
 	 * 
 	 * @param user
+	 * @throws ResourceError 
 	 */
-	public void register(User user) {
+	public void register(User user) throws ResourceError {
 		try {
 			SimpleJdbcCall registerJdbcCall = new SimpleJdbcCall(dataSource)
 					.withProcedureName("registerUser");
@@ -118,15 +103,9 @@ public class RegistrationServiceImpl implements RegistrationService {
 			inputData.put("_username", user.getUsername());
 			inputData.put("_pwd", user.getPassword());
 			inputData.put("_authority", "ROLE_USER");
-			inputData.put("_fName", user.getfName());
-			inputData.put("_mName", user.getmName());
-			inputData.put("_lName", user.getlName());
+			inputData.put("_name", user.getName());
 			inputData.put("_email", user.getEmail());
 			inputData.put("_skill", user.getSkills());
-			inputData.put("_country", user.getLocation().getCountry());
-			inputData.put("_province", user.getLocation().getState());
-			inputData.put("_city", user.getLocation().getCity());
-			inputData.put("_zip", user.getLocation().getZip());
 			inputData.put("_contact", user.getContact());
 			inputData.put("_profilePic", user.getProfilePic());
 
@@ -134,14 +113,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					.addValues(inputData);
 			registerJdbcCall.execute(in);
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
 
 	}
@@ -150,23 +122,18 @@ public class RegistrationServiceImpl implements RegistrationService {
 	 * Registers a user in the database.
 	 * 
 	 * @param user
+	 * @throws ResourceError 
 	 */
-	public void update(User user) {
+	public void update(User user) throws ResourceError {
 		try {
 			SimpleJdbcCall updateJdbcCall = new SimpleJdbcCall(dataSource)
 					.withProcedureName("updateUser");
 
 			Map<String, Object> inputData = new HashMap<String, Object>();
 			inputData.put("_username", user.getUsername());
-			inputData.put("_fName", user.getfName());
-			inputData.put("_mName", user.getmName());
-			inputData.put("_lName", user.getlName());
+			inputData.put("_name", user.getName());
 			inputData.put("_email", user.getEmail());
 			inputData.put("_skill", user.getSkills());
-			inputData.put("_country", user.getLocation().getCountry());
-			inputData.put("_province", user.getLocation().getState());
-			inputData.put("_city", user.getLocation().getCity());
-			inputData.put("_zip", user.getLocation().getZip());
 			inputData.put("_contact", user.getContact());
 			inputData.put("_profilePic", user.getProfilePic());
 
@@ -174,40 +141,26 @@ public class RegistrationServiceImpl implements RegistrationService {
 					.addValues(inputData);
 			updateJdbcCall.execute(in);
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
 	}
 
-	public byte[] getProfilePic(String userName) {
+	public byte[] getProfilePic(String userName) throws ResourceError {
+		Map<String, Object> out = null;
 		try {
 			SimpleJdbcCall getUserDetailsJdbcCall = new SimpleJdbcCall(
 					dataSource).withProcedureName("getUserProfilePic");
 
 			SqlParameterSource in = new MapSqlParameterSource().addValue(
 					"_username", userName);
-			Map<String, Object> out = getUserDetailsJdbcCall.execute(in);
-
-			return (byte[]) out.get("_profilepic");
+			out = getUserDetailsJdbcCall.execute(in);
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
+		return (byte[]) out.get("_profilepic");
 	}
 
-	public void updatePwd(String userName, String pwd, int reset) {
+	public void updatePwd(String userName, String pwd, int reset) throws ResourceError {
 		try {
 			SimpleJdbcCall updatePasswordJdbcCall = new SimpleJdbcCall(
 					dataSource).withProcedureName("updatePassword");
@@ -224,76 +177,81 @@ public class RegistrationServiceImpl implements RegistrationService {
 			// TODO: Need to update user status to show reset page
 
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
 	}
 
-	public List<User> findUsers(String key, String searchString) {
-		String procName = null;
+	public List<User> findUserBySkill( String searchString) throws ResourceError {
+		String procName = "findUserBySkill";
+		Map<String, Object> out = null;
 		try {
-			if (key.equals("city"))
-				procName = "findUserByCity";
-			else if (key.equals("skill"))
-				procName = "findUserBySkill";
-
-			SimpleJdbcCall findByCity = new SimpleJdbcCall(dataSource)
+				SimpleJdbcCall findByCity = new SimpleJdbcCall(dataSource)
 					.withProcedureName(procName).returningResultSet("rs1",
 							new RowMapper<User>() {
 								public User mapRow(ResultSet rs, int rowCount)
 										throws SQLException {
-									Location l = new Location();
-									l.setCity(rs.getString("city"));
-									l.setCountry(rs.getString("country"));
-									l.setState(rs.getString("province"));
-									l.setZip(rs.getString("zip"));
-
-									User u = new User.UserBuilder()
-											.fName(rs.getString("fName"))
-											.mName(rs.getString("mName"))
-											.lName(rs.getString("lName"))
+									
+									User u = new User.UserBuilder().userName(rs.getString("username"))
+											.name(rs.getString("name"))
 											.email(rs.getString("email"))
 											.skills(rs.getString("skill"))
 											.contact(rs.getString("contact"))
-											.location(l)
 											.build();
 
 									return u;
 								}
 							});
 
-			SqlParameterSource in = null;
-			if (key.equals("city"))
-				in = new MapSqlParameterSource()
-						.addValue("_city", searchString);
-			else if (key.equals("skill"))
-				in = new MapSqlParameterSource().addValue("_skill",
-						searchString);
+			SqlParameterSource in = new MapSqlParameterSource().addValue("skills", 	searchString);
 
-			Map<String, Object> out = findByCity.execute(in);
-
-			return (List<User>) out.get("rs1");
-
+			out = findByCity.execute(in);
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
+		return (List<User>) out.get("rs1");
 	}
 
+	public List<User> findUserByLocation(double latitude1, double latitude2, double longitude1, double longitude2) throws ResourceError {
+		String procName = "findUserByLocation";
+		Map<String, Object> out = null;
+		try {
+				SimpleJdbcCall findByLocation = new SimpleJdbcCall(dataSource)
+					.withProcedureName(procName).returningResultSet("rs1",
+							new RowMapper<User>() {
+								public User mapRow(ResultSet rs, int rowCount)
+										throws SQLException {
+									
+									User u = new User.UserBuilder().userName(rs.getString("username"))
+											.name(rs.getString("name"))
+											.email(rs.getString("email"))
+											.skills(rs.getString("skill"))
+											.contact(rs.getString("contact"))
+											.build();
+
+									return u;
+								}
+							});
+
+			Map<String, Double> values = new HashMap<String, Double>();
+			values.put("_latitude1",latitude1);
+			values.put("_latitude2",latitude2);
+			values.put("_longitude1",longitude1);
+			values.put("_longitude2",longitude2);
+			
+			SqlParameterSource in = new MapSqlParameterSource().addValues(values);
+
+			out = findByLocation.execute(in);
+		} catch (DataAccessException e) {
+			handleDataAcessException(e);
+		}
+		return (List<User>) out.get("rs1");
+	}
+
+	
+	
 	// isPwdReset
-	public int isPasswordResetNeeded(String userName) {
+	public int isPasswordResetNeeded(String userName) throws ResourceError{
+		Integer i = 0;
 		try {
 			SimpleJdbcCall getUserDetailsJdbcCall = new SimpleJdbcCall(
 					dataSource).withProcedureName("isPwdReset");
@@ -301,18 +259,52 @@ public class RegistrationServiceImpl implements RegistrationService {
 			SqlParameterSource in = new MapSqlParameterSource().addValue(
 					"_username", userName);
 			Map<String, Object> out = getUserDetailsJdbcCall.execute(in);
-			Integer i = (Integer)out.get("_resetpwd");
-			return i == null ? 0: i.intValue();
+			i = (Integer)out.get("_resetpwd");
+			
 		} catch (DataAccessException e) {
-			SQLException sqe = (SQLException) e.getCause();
-			logger.error("Error While invoking "
-					+ this.getClass().getEnclosingMethod().getName()
-					+ sqe.getSQLState());
-			ResourceError re = new ResourceError(e);
-			re.setErrorCode(sqe.getErrorCode());
-			re.setErrorString(sqe.getSQLState());
-			throw re;
+			handleDataAcessException(e);
 		}
+		return i == null ? 0: i.intValue();
 	}
+	
+	private void handleDataAcessException(DataAccessException e) throws ResourceError {
+		SQLException sqe = (SQLException) e.getCause();
+		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+		logger.error("Error While invoking <class>" + trace[1].getClassName() +
+				" <method>" + trace[1].getMethodName() + " error message "
+				+ sqe.getMessage() + "<sql error> " + sqe.getErrorCode());
+		ResourceError re = new ResourceError(e);
+		re.setErrorCode(sqe.getErrorCode());
+		re.setErrorString(sqe.getMessage());
+		throw re;
+	
+	}
+
+	public void updateLocation(String username, Location location)
+			throws ResourceError {
+		try {
+			SimpleJdbcCall updateLocationJdbcCall = new SimpleJdbcCall(
+					dataSource).withProcedureName("updateLocation");
+
+			Map<String, Object> inputData = new HashMap<String, Object>();
+			inputData.put("_username", username);
+			inputData.put("_latitude", location.getLatitude());
+			inputData.put("_longitude", location.getLongitude());
+
+			SqlParameterSource in = new MapSqlParameterSource()
+					.addValues(inputData);
+			updateLocationJdbcCall.execute(in);
+
+		} catch (DataAccessException e) {
+			handleDataAcessException(e);
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
 
 }

@@ -4,28 +4,33 @@
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
-<body onload="bodyLoaded()">
+<body >
 <script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
 <script type="text/javascript" src="../js/authenticationProxy.js"></script>
 
 <script>
 		var host = "http://localhost:8080/ResourceMgmt";
 		
-		function bodyLoaded() {
-			var authentication = new AuthenticationProxy(host, "meetMePal");
-			authentication.loginWithPassword("hh", "j");
-		}
+		
 		
 		//Demo of getAPI
 		function findUsers() {
+			var skill = escape("DB2,C#,java")
 			$.ajax( {
-			      	url: host.concat("/resources/?searchKey=city&searchString=pune&access_token=" + window.bearerToken),
+			      	url: host.concat("/search/skills?searchString=" + skill),
 			      	type: 'GET'
-		    	}).done(function(o) { alert(o);});
+		    	}).done(function(o) { 
+		    		
+		    		var src = host + "/profilePic/" + o[0].username;
+		    		
+		    		$("#sampleImg").attr("src", src);
+		    		
+		    	});
 		}	
 
 </script>
 
 <button onclick="findUsers()">Get User</button>
+<img id="sampleImg" width="500px" height="500px"/>
 </body>
 </html>

@@ -1,57 +1,24 @@
 package prj.resources.mgmt.domain;
 
 public class Location {
-	private String country;
-	private String state;
-	private String City;
-	private String zip;
-	/**
-	 * @return the country
-	 */
-	public String getCountry() {
-		return country;
+	private double latitude;
+	
+	private double longitude;
+
+	public double getLatitude() {
+		return latitude;
 	}
-	/**
-	 * @param country the country to set
-	 */
-	public void setCountry(String country) {
-		this.country = country;
+
+	public void setLatitude(double latitude) {
+		this.latitude = latitude;
 	}
-	/**
-	 * @return the province
-	 */
-	public String getState() {
-		return state;
+
+	public double getLongitude() {
+		return longitude;
 	}
-	/**
-	 * @param province the province to set
-	 */
-	public void setState(String state) {
-		this.state = state;
-	}
-	/**
-	 * @return the city
-	 */
-	public String getCity() {
-		return City;
-	}
-	/**
-	 * @param city the city to set
-	 */
-	public void setCity(String city) {
-		City = city;
-	}
-	/**
-	 * @return the zip
-	 */
-	public String getZip() {
-		return zip;
-	}
-	/**
-	 * @param zip the zip to set
-	 */
-	public void setZip(String zip) {
-		this.zip = zip;
+
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
 	}
 	
 	

@@ -12,7 +12,7 @@
 		
 		function bodyLoaded() {
 			var authentication = new AuthenticationProxy(host, "meetMePal");
-			authentication.loginWithPassword("hh", "j");
+			authentication.loginWithPassword("himesh", "himesh");
 		}
 		
 		
@@ -22,7 +22,7 @@
 			$( '#updateUser' )
 			  .submit( function( e ) {
 			    $.ajax( {
-			      url: host.concat("/resources/hh?access_token=" + window.bearerToken),
+			      url: host.concat("/resources/update?access_token=" + window.bearerToken),
 			      type: 'POST',
 			      data: new FormData( $("#updateUser")[0] ),
 			      processData: false,
@@ -36,12 +36,12 @@
 		//Demo of getAPI
 		function getUserDetailsProxy() {
 			$.ajax( {
-			      	url: host.concat("/resources/hh?access_token=" + window.bearerToken),
+			      	url: host.concat("/resources/fetch?access_token=" + window.bearerToken),
 			      	type: 'GET'
 		    	}).done(function(o) { 
-					$("#fName").val(o.fName);
-					$("#mName").val(o.mName);
-					$("#lName").val(o.lName);
+					$("#name").val(o.name);
+					$("#contact").val(o.contact);
+					$("#skills").val(o.skills);
 		    	});
 			
 			
@@ -58,11 +58,11 @@
 <button onclick="getUserDetailsProxy()">GetUser</button>
 
 <form id="updateUser" action="#" >
-	FirstName <input type="text" id="fName" name="fName"></input><br/>
-	MiddleName <input type="text" id="mName" name="mName"></input><br/>
-	LastName <input type="text" id="lName" name="lName"></input><br/>
-	ProfilePic <input type="file" id="profilePic" name="profilePic"></input><br/>
-	Email <input type="text" id="email" name="email"></input><br/>
+	FirstName <input type="text" id="name" name="name"></input><br/>
+	Contact <input type="text" id="contact"  name="contact"></input><br/>
+	Email <input type="text" name="email"></input><br/>
+	Skills <input type="text" id="skills" name="skills"></input><br/>
+	ProfilePic <input type="file" name="profilePic"></input><br/>
 	<input type="submit"/>
 </form>
 
