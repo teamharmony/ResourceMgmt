@@ -43,7 +43,9 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
 	<filter-mapping>
 		<filter-name>resourceResolverFilter</filter-name>
-		<url-pattern>/resources/*</url-pattern>
+		<url-pattern>/resources/fetch</url-pattern>
+		<url-pattern>/resources/update</url-pattern>
+		<url-pattern>/resources/fetch</url-pattern>
 		<url-pattern>/password/reset</url-pattern>
 		<url-pattern>/logout</url-pattern>
 	</filter-mapping>
