@@ -81,8 +81,10 @@ public class User {
 		this.password = builder.password;
 		this.profilePic = builder.profilePic;
 		this.visible = builder.visible;
-		this.latitude = builder.location.getLatitude();
-		this.longitude = builder.location.getLongitude();
+		if(builder.location != null) {
+			this.latitude = builder.location.getLatitude();
+			this.longitude = builder.location.getLongitude();
+		}
 	}
 	
 	public static class UserBuilder {
