@@ -60,6 +60,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 					.email((String) out.get("_email"))
 					.skills((String) out.get("_skill"))
 					.contact((String) out.get("_contact"))
+					.visible((Integer) out.get("_visible"))
 					.build();
 
 			
@@ -104,6 +105,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			inputData.put("_pwd", user.getPassword());
 			inputData.put("_authority", "ROLE_USER");
 			inputData.put("_name", user.getName());
+			inputData.put("_visible", user.getVisible());
 			inputData.put("_email", user.getEmail());
 			inputData.put("_skill", user.getSkills());
 			inputData.put("_contact", user.getContact());
@@ -132,6 +134,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 			Map<String, Object> inputData = new HashMap<String, Object>();
 			inputData.put("_username", user.getUsername());
 			inputData.put("_name", user.getName());
+			inputData.put("_visible", user.getVisible());
 			inputData.put("_email", user.getEmail());
 			inputData.put("_skill", user.getSkills());
 			inputData.put("_contact", user.getContact());
@@ -301,7 +304,37 @@ public class RegistrationServiceImpl implements RegistrationService {
 		
 		
 	}
-	
+
+	public List<User> findUserByName(String searchString) throws ResourceError {
+		String procName = "findUserByName";
+		Map<String, Object> out = null;
+		try {
+				SimpleJdbcCall findByName = new SimpleJdbcCall(dataSource)
+					.withProcedureName(procName).returningResultSet("rs1",
+							new RowMapper<User>() {
+								public User mapRow(ResultSet rs, int rowCount)
+										throws SQLException {
+									
+									User u = new User.UserBuilder().userName(rs.getString("username"))
+											.name(rs.getString("name"))
+											.email(rs.getString("email"))
+											.skills(rs.getString("skill"))
+											.contact(rs.getString("contact"))
+											.build();
+
+									return u;
+								}
+							});
+
+			SqlParameterSource in = new MapSqlParameterSource().addValue("_name", 	searchString);
+
+			out = findByName.execute(in);
+		} catch (DataAccessException e) {
+			handleDataAcessException(e);
+		}
+		return (List<User>) out.get("rs1");
+	}
+
 	
 	
 	

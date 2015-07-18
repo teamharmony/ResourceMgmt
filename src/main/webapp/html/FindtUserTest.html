@@ -17,9 +17,27 @@
 		function findUsers() {
 			var skill = escape("DB2,C#,java")
 			$.ajax( {
-			      	url: host.concat("/search/skills?searchString=" + skill),
+			      	url: host.concat("/search/skills?skills=" + skill),
 			      	type: 'GET'
 		    	}).done(function(o) { 
+		    		if(!o)
+		    			return;
+		    		
+		    		var src = host + "/profilePic/" + o[0].username;
+		    		
+		    		$("#sampleImg").attr("src", src);
+		    		
+		    	});
+		}	
+
+		function findUsersByName() {
+			var name = escape("Shantesh")
+			$.ajax( {
+			      	url: host.concat("/search/name?name=" + name),
+			      	type: 'GET'
+		    	}).done(function(o) { 
+		    		if(!o)
+		    			return;
 		    		
 		    		var src = host + "/profilePic/" + o[0].username;
 		    		
@@ -30,7 +48,8 @@
 
 </script>
 
-<button onclick="findUsers()">Get User</button>
+<button onclick="findUsers()">Get User By Skill</button>
+<button onclick="findUsersByName()">Get User By Name</button>
 <img id="sampleImg" width="500px" height="500px"/>
 </body>
 </html>

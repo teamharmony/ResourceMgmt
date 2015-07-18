@@ -9,8 +9,18 @@ public class User {
 	private String skills;
 	private String password;
 	private byte[] profilePic;
+	private int visible;
 	
 	
+	
+	public int getVisible() {
+		return visible;
+	}
+
+	public void setVisible(int visible) {
+		this.visible = visible;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -42,7 +52,7 @@ public class User {
 	
 	public User(String name, String contact,
 			String username, String email, String skills, String password,
-			byte[] profilePic, Location location) {
+			byte[] profilePic, Location location, int visible) {
 		super();
 		this.name = name;
 		this.contact = contact;
@@ -51,6 +61,7 @@ public class User {
 		this.skills = skills;
 		this.password = password;
 		this.profilePic = profilePic;
+		this.visible = visible;
 	}
 	
 	private User(UserBuilder builder) {
@@ -61,6 +72,7 @@ public class User {
 		this.skills = builder.skills;
 		this.password = builder.password;
 		this.profilePic = builder.profilePic;
+		this.visible = builder.visible;
 	}
 	
 	public static class UserBuilder {
@@ -71,6 +83,7 @@ public class User {
 		private String skills;
 		private String password;
 		private byte[] profilePic;
+		private int visible;
 		
 		public UserBuilder name(String name) {
 			this.name = name;
@@ -108,6 +121,10 @@ public class User {
 			return this;
 		}
 		
+		public UserBuilder visible(int visible) {
+			this.visible = visible;
+			return this;
+		}
 		
 		public User build() {
 			User u = new User(this);

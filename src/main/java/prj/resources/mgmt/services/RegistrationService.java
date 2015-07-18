@@ -100,5 +100,14 @@ public interface RegistrationService {
 	 */
 	public void updateLocation(String username, Location location) throws ResourceError;
 	
+	/**
+	 * search by name
+	 * @param key
+	 * @return
+	 * @throws ResourceError 
+	 */
+	public List<User> findUserByName(String searchString) throws ResourceError;
+
+
 	
 }

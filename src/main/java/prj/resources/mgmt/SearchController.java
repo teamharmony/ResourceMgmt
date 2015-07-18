@@ -47,8 +47,21 @@ public class SearchController {
 	 */
 	@ResponseBody
 	@RequestMapping(value="/skills", method = RequestMethod.GET)
-	public List<User> findBySkill(@RequestParam(required = true, value = "searchString") String searchString) throws ResourceError{
+	public List<User> findBySkill(@RequestParam(required = true, value = "skills") String searchString) throws ResourceError{
 		return registrationService.findUserBySkill(searchString); 
+	}
+
+	
+	/**
+	 * find by either skill.
+	 * @param key
+	 * @param searchString
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/name", method = RequestMethod.GET)
+	public List<User> findByName(@RequestParam(required = true, value = "name") String searchString) throws ResourceError{
+		return registrationService.findUserByName(searchString); 
 	}
 
 	

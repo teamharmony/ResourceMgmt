@@ -12,7 +12,7 @@
 		
 		function bodyLoaded() {
 			var authentication = new AuthenticationProxy(host, "meetMePal");
-			authentication.loginWithPassword("himesh", "himesh");
+			authentication.loginWithPassword("shan_kakode", "passw0rd");
 		}
 		
 		
@@ -41,13 +41,21 @@
 		    	}).done(function(o) { 
 					$("#name").val(o.name);
 					$("#contact").val(o.contact);
+					$("#email").val(o.email);
 					$("#skills").val(o.skills);
+					if(o.visible === 1)
+						$("#visible")[0].checked = 1;
+					else
+						$("#visible")[0].checked = 0;
 		    	});
 			
 			
 		}	
 		
-		
+		function 	handleVisibility(oEvent) {
+			var cb = oEvent.target;
+			cb.value = cb.checked ? 1: 0;
+		}
 
 </script>
 
@@ -60,9 +68,10 @@
 <form id="updateUser" action="#" >
 	FirstName <input type="text" id="name" name="name"></input><br/>
 	Contact <input type="text" id="contact"  name="contact"></input><br/>
-	Email <input type="text" name="email"></input><br/>
+	Email <input type="text" id="email" name="email"></input><br/>
 	Skills <input type="text" id="skills" name="skills"></input><br/>
 	ProfilePic <input type="file" name="profilePic"></input><br/>
+	Visible<input id="visible"  type="checkbox" name="visible" onchange="handleVisibility(event)"></input><br/>
 	<input type="submit"/>
 </form>
 

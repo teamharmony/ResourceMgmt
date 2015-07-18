@@ -29,7 +29,11 @@
 			
 		}	
 	
-
+		function 	handleVisibility(oEvent) {
+			var cb = oEvent.target;
+			cb.value = cb.checked ? 1: 0;
+		}
+		
 </script>
 
 
@@ -43,6 +47,7 @@
 	Email <input type="text" name="email"></input><br/>
 	Skills <input type="text" name="skills"></input><br/>
 	ProfilePic <input type="file" name="profilePic"></input><br/>
+	Visible<input type="checkbox" name="visible" onchange="handleVisibility(event)"></input><br/>
 	<input type="submit"/>
 </form>
 </body>

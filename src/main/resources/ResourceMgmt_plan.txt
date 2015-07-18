@@ -104,16 +104,16 @@ drop table user_details;
 create table user_details(
 	name varchar(30) not null,
 	username varchar(12) not null,
+	visible smallint default 1,
 	email varchar(60) not null,
 	skill varchar(120) not null,
 	contact varchar(15) not null,
 	profilePic longblob,
 	latitude double,
 	longitude double,
-	primary key(email),
+	primary key(name, email),
 	foreign key(username) references users(username)
 	) engine=InnoDB;
-
 
 
 
@@ -129,14 +129,41 @@ delimiter ;
 
 
 
+
+
+drop procedure findUserByName;		
+delimiter //
+create procedure findUserByName(IN _name varchar(30))
+	begin
+		select ud.name ,
+			ud.username,
+			ud.email,
+			ud.skill,
+			ud.contact
+		from user_details as ud
+		 where 	lower(ud.name) = lower(_name) and
+		 ud.visible != 0;
+	end//
+delimiter ;
+
+
+
+
 drop procedure findUserByLocation;		
 delimiter //
 create procedure findUserByLocation(IN _latitude1 double, IN _latitude2 double, 
 		IN _longitude1 double, IN _longitude2 double)
 	begin
-		select * from user_details where 
-		(latitude between _latitude1 and _latitude2) and
-		(longitude between _longitude1 and _longitude2);
+		select ud.name ,
+			ud.username,
+			ud.email,
+			ud.skill,
+			ud.contact		
+		from user_details as ud 
+		where 
+		(ud.latitude between _latitude1 and _latitude2) and
+		(ud.longitude between _longitude1 and _longitude2) and
+		ud.visible != 0;
 	end//
 delimiter ;
 
@@ -171,8 +198,12 @@ begin
     		SET strLen = CHAR_LENGTH(skills);
 
 			Insert into tblResults
-			select name, username, email, skill, contact  from user_details where lower(skill) like concat('%', lower(SUBSTRING_INDEX(skills, ',', 1)) , '%');
-
+			select ud.name, ud.username, ud.email, ud.skill, ud.contact  
+			from user_details as ud
+			where 
+			lower(ud.skill) like concat('%', lower(SUBSTRING_INDEX(skills, ',', 1)) , '%') and
+			ud.visible != 0;
+			
     	    SET SubStrLen = CHAR_LENGTH(SUBSTRING_INDEX(skills, ',', 1)) + 2;
     		SET skills = MID(skills, SubStrLen, strLen);
 
@@ -196,6 +227,7 @@ create procedure registerUser(IN _username varchar(12),
 						IN _pwd varchar(32),
 						IN _authority varchar(10),
 						IN _name varchar(30),
+						IN _visible smallint,
 						IN _skill varchar(120),
 						IN _email varchar(30), 
 						IN _contact varchar(15),
@@ -205,8 +237,8 @@ begin
 	start transaction;
 		insert into users(username, password) values(_username, md5(_pwd));
 		insert into authorities (username, authority) values(_username, _authority);
-		insert into user_details (username, name, email, skill, contact) 
-			values(_username, _name, _email, _skill, _contact);
+		insert into user_details (username, name, email, skill, contact, visible) 
+			values(_username, _name, _email, _skill, _contact, _visible);
 			
 		if _profilePic is not null then
 			update user_details
@@ -227,7 +259,8 @@ create procedure updateUser(IN _username varchar(12),
 						IN _email varchar(30),
 						IN _skill varchar(120),
 						IN _contact varchar(15),
-						IN _profilePic longblob)
+						IN _profilePic longblob,
+						IN _visible smallint)
 begin 
 			
 		if _name is not null then
@@ -239,6 +272,12 @@ begin
 			update user_details
 				set email = _email where username = _username;
 		end if;
+		
+		if _visible is not null then
+			update user_details
+				set visible = _visible where username = _username;
+		end if;
+		
 		
 		if _skill is not null then
 			update user_details
@@ -276,11 +315,12 @@ create procedure getUserDetails(IN _username varchar(12),
 						OUT _name varchar(30),
 						OUT _email varchar(30), 
 						OUT _skill varchar(120),
-						OUT _contact varchar(15)
+						OUT _contact varchar(15),
+						OUT _visible smallint
 )
 begin 
-	select name,  email, skill,  contact into  
-		_name, _email, _skill, _contact
+	select name,  email, skill,  contact, visible  into  
+		_name, _email, _skill, _contact, _visible
 			from user_details
 			where username = _username;
 end//
