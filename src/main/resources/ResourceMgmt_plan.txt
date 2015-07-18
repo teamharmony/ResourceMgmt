@@ -139,7 +139,9 @@ create procedure findUserByName(IN _name varchar(30))
 			ud.username,
 			ud.email,
 			ud.skill,
-			ud.contact
+			ud.contact,
+			ud.latitude,
+			ud.longitude
 		from user_details as ud
 		 where 	lower(ud.name) = lower(_name) and
 		 ud.visible != 0;
@@ -158,7 +160,9 @@ create procedure findUserByLocation(IN _latitude1 double, IN _latitude2 double,
 			ud.username,
 			ud.email,
 			ud.skill,
-			ud.contact		
+			ud.contact,
+			ud.latitude,
+			ud.longitude		
 		from user_details as ud 
 		where 
 		(ud.latitude between _latitude1 and _latitude2) and
@@ -189,7 +193,8 @@ begin
 		email varchar(60) not null,
 		skill varchar(120) not null,
 		contact varchar(15) not null
-		
+		latitude double,
+		longitude double
   	);
   
 
@@ -198,7 +203,7 @@ begin
     		SET strLen = CHAR_LENGTH(skills);
 
 			Insert into tblResults
-			select ud.name, ud.username, ud.email, ud.skill, ud.contact  
+			select ud.name, ud.username, ud.email, ud.skill, ud.contact, ud.latitude, ud.longitude  
 			from user_details as ud
 			where 
 			lower(ud.skill) like concat('%', lower(SUBSTRING_INDEX(skills, ',', 1)) , '%') and
