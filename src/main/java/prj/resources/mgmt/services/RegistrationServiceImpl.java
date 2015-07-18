@@ -194,11 +194,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 								public User mapRow(ResultSet rs, int rowCount)
 										throws SQLException {
 									
+
+									Location location = new Location();
+									location.setLatitude(rs.getDouble("latitude"));
+									location.setLongitude(rs.getDouble("longitude"));
+									
 									User u = new User.UserBuilder().userName(rs.getString("username"))
 											.name(rs.getString("name"))
 											.email(rs.getString("email"))
 											.skills(rs.getString("skill"))
 											.contact(rs.getString("contact"))
+											.location(location)
 											.build();
 
 									return u;
@@ -224,11 +230,17 @@ public class RegistrationServiceImpl implements RegistrationService {
 								public User mapRow(ResultSet rs, int rowCount)
 										throws SQLException {
 									
+
+									Location location = new Location();
+									location.setLatitude(rs.getDouble("latitude"));
+									location.setLongitude(rs.getDouble("longitude"));
+
 									User u = new User.UserBuilder().userName(rs.getString("username"))
 											.name(rs.getString("name"))
 											.email(rs.getString("email"))
 											.skills(rs.getString("skill"))
 											.contact(rs.getString("contact"))
+											.location(location)
 											.build();
 
 									return u;
@@ -320,11 +332,16 @@ public class RegistrationServiceImpl implements RegistrationService {
 								public User mapRow(ResultSet rs, int rowCount)
 										throws SQLException {
 									
+									Location l = new Location();
+									l.setLatitude(rs.getDouble("latitude"));
+									l.setLongitude(rs.getDouble("longitude"));
+									
 									User u = new User.UserBuilder().userName(rs.getString("username"))
 											.name(rs.getString("name"))
 											.email(rs.getString("email"))
 											.skills(rs.getString("skill"))
 											.contact(rs.getString("contact"))
+											.location(l)
 											.build();
 
 									return u;

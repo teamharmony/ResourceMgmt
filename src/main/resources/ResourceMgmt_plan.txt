@@ -192,7 +192,7 @@ begin
 		username varchar(12) not null,
 		email varchar(60) not null,
 		skill varchar(120) not null,
-		contact varchar(15) not null
+		contact varchar(15) not null,
 		latitude double,
 		longitude double
   	);

@@ -10,9 +10,19 @@ public class User {
 	private String password;
 	private byte[] profilePic;
 	private int visible;
+	private double latitude;
+	private double longitude;
 	
 	
 	
+	public double getLatitude() {
+		return latitude;
+	}
+
+	public double getLongitude() {
+		return longitude;
+	}
+
 	public int getVisible() {
 		return visible;
 	}
@@ -58,6 +68,8 @@ public class User {
 		this.password = password;
 		this.profilePic = profilePic;
 		this.visible = visible;
+		this.latitude = location.getLatitude();
+		this.longitude = location.getLongitude();
 	}
 	
 	private User(UserBuilder builder) {
@@ -69,6 +81,8 @@ public class User {
 		this.password = builder.password;
 		this.profilePic = builder.profilePic;
 		this.visible = builder.visible;
+		this.latitude = builder.location.getLatitude();
+		this.longitude = builder.location.getLongitude();
 	}
 	
 	public static class UserBuilder {
@@ -80,6 +94,12 @@ public class User {
 		private String password;
 		private byte[] profilePic;
 		private int visible;
+		private Location location;
+		
+		public UserBuilder location(Location location) {
+			this.location = location;
+			return this;
+		}
 		
 		public UserBuilder name(String name) {
 			this.name = name;
