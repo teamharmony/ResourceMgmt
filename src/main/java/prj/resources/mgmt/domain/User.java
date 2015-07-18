@@ -17,10 +17,6 @@ public class User {
 		return visible;
 	}
 
-	public void setVisible(int visible) {
-		this.visible = visible;
-	}
-
 	public String getName() {
 		return name;
 	}
