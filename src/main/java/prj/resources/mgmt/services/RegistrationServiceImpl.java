@@ -271,14 +271,19 @@ public class RegistrationServiceImpl implements RegistrationService {
 	}
 	
 	private void handleDataAcessException(DataAccessException e) throws ResourceError {
-		SQLException sqe = (SQLException) e.getCause();
-		StackTraceElement[] trace = Thread.currentThread().getStackTrace();
-		logger.error("Error While invoking <class>" + trace[1].getClassName() +
-				" <method>" + trace[1].getMethodName() + " error message "
-				+ sqe.getMessage() + "<sql error> " + sqe.getErrorCode());
 		ResourceError re = new ResourceError(e);
-		re.setErrorCode(sqe.getErrorCode());
-		re.setErrorString(sqe.getMessage());
+		re.setErrorString(e.getMessage());
+
+		if(e.getCause() instanceof SQLException) {
+			SQLException sqe = (SQLException) e.getCause();
+			StackTraceElement[] trace = Thread.currentThread().getStackTrace();
+			logger.error("Error While invoking <class>" + trace[1].getClassName() +
+					" <method>" + trace[1].getMethodName() + " error message "
+					+ sqe.getMessage() + "<sql error> " + sqe.getErrorCode());
+			re.setErrorCode(sqe.getErrorCode());
+			re.setErrorString(sqe.getMessage());
+		}
+		
 		throw re;
 	
 	}
