@@ -16,7 +16,8 @@
 		location="/img/" mapping="/img/**"/> <mvc:resources location="/js/" mapping="/js/**"/> 
 		<mvc:resources location="/fonts/" mapping="/fonts/**"/> -->
 	<mvc:resources location="/apk/" mapping="/apk/**" />
-	<!-- <mvc:resources location="/js/" mapping="/js/**" />-->
+	<mvc:resources location="/js/" mapping="/js/**" />
+	<mvc:resources location="/html/" mapping="/html/**" />
 
 	<mvc:annotation-driven>
 		<mvc:message-converters>

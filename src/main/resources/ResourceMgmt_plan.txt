@@ -234,7 +234,7 @@ create procedure registerUser(IN _username varchar(12),
 						IN _name varchar(30),
 						IN _visible smallint,
 						IN _skill varchar(120),
-						IN _email varchar(30), 
+						IN _email varchar(60), 
 						IN _contact varchar(15),
 						IN _profilePic longblob						
 						)
@@ -261,7 +261,7 @@ drop procedure updateUser;
 delimiter //
 create procedure updateUser(IN _username varchar(12), 
 						IN _name varchar(30),
-						IN _email varchar(30),
+						IN _email varchar(60),
 						IN _skill varchar(120),
 						IN _contact varchar(15),
 						IN _profilePic longblob,
@@ -318,7 +318,7 @@ drop procedure getUserDetails;
 delimiter //
 create procedure getUserDetails(IN _username varchar(12),
 						OUT _name varchar(30),
-						OUT _email varchar(30), 
+						OUT _email varchar(60), 
 						OUT _skill varchar(120),
 						OUT _contact varchar(15),
 						OUT _visible smallint

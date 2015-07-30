@@ -79,7 +79,7 @@ public class ResourceController {
 	public ResponseEntity<User> registerNewUser(
 			@RequestParam(required = true, value = "name") String name,
 			@RequestParam(required = true, value = "contact") String contact,
-			@RequestParam(required = true, value = "visible", defaultValue="0") int visible,
+			@RequestParam(required = true, value = "visible", defaultValue="0") String visible,
 			@RequestParam(required = true, value = "username") String username,
 			@RequestParam(required = true, value = "email") String email,
 			@RequestParam(required = true, value = "skills") String skills,
@@ -92,7 +92,7 @@ public class ResourceController {
 					.userName(username)
 					.email(email)
 					.password(password)
-					.visible(visible)
+					.visible(Integer.parseInt(visible))
 					.profilePic(
 							profilePic != null ? profilePic.getBytes() : null)
 					.skills(skills).build();
@@ -133,7 +133,7 @@ public class ResourceController {
 			@RequestParam(required = false, value = "name") String name,
 			@RequestParam(required = false, value = "zipCode") String zipCode,
 			@RequestParam(required = false, value = "skills") String skills,
-			@RequestParam(required = false, value = "visible", defaultValue="0") int visible,
+			@RequestParam(required = true, value = "visible", defaultValue="0") String visible,
 			@RequestParam(required = false, value = "email") String email,
 			@RequestParam(required = false, value = "contact") String contact,
 			@RequestParam(required = false, value = "profilePic") MultipartFile profilePic,
@@ -146,7 +146,7 @@ public class ResourceController {
 					.contact(contact)
 					.userName(username)
 					.email(email)
-					.visible(visible)
+					.visible(Integer.parseInt(visible))
 					.userName(username)
 					.profilePic(
 							profilePic != null ? profilePic.getBytes() : null)
