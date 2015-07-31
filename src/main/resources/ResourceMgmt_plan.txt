@@ -111,11 +111,13 @@ create table user_details(
 	profilePic longblob,
 	latitude double,
 	longitude double,
-	primary key(name, email),
+	primary key(email),
 	foreign key(username) references users(username)
 	) engine=InnoDB;
 
 
+CREATE UNIQUE INDEX search_by_name
+ON user_details ( name);
 
 drop procedure updateLocation;		
 delimiter //

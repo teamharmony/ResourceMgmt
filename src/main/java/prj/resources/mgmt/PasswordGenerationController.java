@@ -1,5 +1,6 @@
 package prj.resources.mgmt;
 
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,7 @@ public class PasswordGenerationController {
 		return new ResponseEntity<ClientErrorInfo>(c, HttpStatus.CONFLICT);
 	}
 	
+
 	/**
 	 * sets a temporary password for the user and sends an email.
 	 * @param username
