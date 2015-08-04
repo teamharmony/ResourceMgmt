@@ -10,6 +10,10 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 
+	<bean id="validationService" class="prj.resources.mgmt.services.ValidationServiceImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
 	 <!-- <bean id="pwdGen" class="prj.resources.mgmt.services.RandomGenerator"></bean>-->   
 	 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">

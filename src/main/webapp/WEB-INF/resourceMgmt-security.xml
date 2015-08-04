@@ -39,6 +39,10 @@
 			access="ROLE_ANONYMOUS" /> <!-- in-secured POST -->
 		<intercept-url pattern="/resources/profilePic/**" access="ROLE_ANONYMOUS" />
 		<intercept-url pattern="/resources/**" access="ROLE_USER" />
+		<!--  New validation end-points -->
+		<intercept-url pattern="/validate/userName" access="ROLE_ANONYMOUS" />
+		<intercept-url pattern="/validate/email" access="ROLE_ANONYMOUS" />
+		<!--  New validation end-points END -->
 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 	</http>

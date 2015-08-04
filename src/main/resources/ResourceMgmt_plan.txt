@@ -130,7 +130,22 @@ create procedure updateLocation(IN _username varchar(12), IN _latitude double, I
 delimiter ;
 
 
+drop procedure isUserNameOccupied;		
+delimiter //
+create procedure isUserNameOccupied(IN _username varchar(12), OUT _occupied smallint )
+	begin
+		select count(*) into _occupied from users where username = _username; 
+	end//
+delimiter ;
 
+
+drop procedure isEmailOccupied;		
+delimiter //
+create procedure isEmailOccupied(IN _email varchar(60), OUT _occupied smallint )
+	begin
+		select count(*) into _occupied from user_details where email = _email; 
+	end//
+delimiter ;
 
 
 drop procedure findUserByName;		
