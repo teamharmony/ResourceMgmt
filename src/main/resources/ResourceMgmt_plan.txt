@@ -256,6 +256,15 @@ create procedure registerUser(IN _username varchar(12),
 						IN _profilePic longblob						
 						)
 begin 
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		rollback;
+		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
+ 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
+		signal @sqlstate;
+		
+	END;
 	start transaction;
 		insert into users(username, password) values(_username, md5(_pwd));
 		insert into authorities (username, authority) values(_username, _authority);
