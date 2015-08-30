@@ -1,89 +1,6 @@
-Little about the interaction design
-====================================================
-
-End user-------------->Login.jsp----<<New User>>----->Resgistration.jsp		
-					|					|				MainView.jsp(secured)
-					|					|					|
-				      \|/					|				      /|\
-					|					|					|
-				Spring Security filter------------ |------------------------------
-					|					|
-					|					|
-					|				      \|/
-					|					|
-					|----------------<-------------
-					|
-					|
-				ResourcesController---------ResourcesService----------ResurcesDAO
-
-
-/resourceMgmt/users [POST] registers a new user.
-/resourceMgmt/users/{user-id} [GET] fetches details of a registered user
-/resourceMgmt/users/{user-id} [PUT] edit profile of a registered user
-
-(Need details about FB and LinkedIn log-in API)
-
-===================================================================
-Some syntax
-	--declare _rollback_flag int default 0;
-	--declare continue handler for sqlexception 
-	--	set _rollback_flag = 1;	
-	--if _rollback_flag then
-	--	rollback;
-	--else
-		commit;
-	--end if;
-
---	DECLARE EXIT HANDLER FOR SQLEXCEPTION
---	BEGIN
---		rollback;
---		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
- --		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
---		SET @full_error = CONCAT("ERROR ", @errno, " (", @sqlstate, "): ", @text);
---		SELECT @full_error;
---	END;
-
-
-
-
-drop table skills;
-create table skills(
-	skill varchar(100) not null,
-	skillId smallint
-) engine=InnoDB; 
-
-insert into skills values(1, "HTML");
-insert into skills values(2, "JavaScript");
-insert into skills values(3, "CSS");
-insert into skills values(4, "JAVA");
-insert into skills values(5, "PHP");
-insert into skills values(6, "RUBY");
-insert into skills values(7, "JAVA-Based-Scripts");
-insert into skills values(8, "C#");
-insert into skills values(9, "C");
-insert into skills values(10, "C++");
-insert into skills values(11, "MySQL");
-insert into skills values(12, "Oracle");
-insert into skills values(13, "IBM Products");
-insert into skills values(14, "Others");
-
-
-create table user_skills(
-	username varchar(12) not null, 
-	skillId smallint,
-	primary key()username, skillId),
-	foreign key(username) references users(username),
-	foreign key(skillId) references skills(skillId)
-) engine=innoDB;
-		
-=======================================================================
-back-end details
-
-
 create database resourcemgmt;
 use resourcemgmt;
 
-set autocommit = 0;
 
 drop table users;
 create table users (
@@ -118,6 +35,128 @@ create table user_details(
 
 CREATE UNIQUE INDEX search_by_name
 ON user_details ( name);
+
+
+drop table meetings;
+create table meetings(
+	id mediumint not null auto_increment,
+	fromUserName varchar(12) not null,
+	toUserName varchar(12) not null,
+	agenda varchar(35) not null,
+	details varchar(500) not null,
+	meetDateTime int unsigned,
+	venue varchar(200) not null,
+	status smallint not null default 0,
+	primary key(id),
+	foreign key(fromUserName) references users(username),
+	foreign key(toUserName) references users(username)
+) engine=InnoDB;
+
+drop table messages;
+create table messages(
+	id MEDIUMINT NOT NULL AUTO_INCREMENT,
+	fromUserName varchar(12) not null,
+	toUserName varchar(12) not null,
+	subject varchar(35) not null,
+	message varchar(500) not null,
+	status mediumint not null default 0,
+	primary key(id),
+	foreign key(fromUserName) references users(username),
+	foreign key(toUserName) references users(username)
+
+);
+
+
+
+drop procedure createMeetRequest;		
+delimiter //
+create procedure createMeetRequest(
+								IN _fromUserName varchar(12), 
+								IN _toUserName varchar(12),
+								IN _agenda varchar(35),
+								IN _details varchar(500),
+								IN _dateTime int,
+								IN _venue varchar(200)
+							)
+	begin
+		insert into meetings(fromUserName, toUserName, agenda, details, meetDateTime, venue, status)
+		values(_fromUserName, _toUserName, _agenda, _details, _dateTime, _venue, 0);
+	end//
+delimiter ;
+
+
+drop procedure showMeetRequests;		
+delimiter //
+create procedure showMeetRequests(IN _userName varchar(12))
+	begin
+		select id, fromUserName, agenda, details, meetDateTime, venue, status
+		from meetings
+		where toUserName = _userName and
+			meetDateTime > unix_timestamp();
+	end//
+delimiter ;
+
+
+drop procedure updateMeetRequestStatus;		
+delimiter //
+create procedure updateMeetRequestStatus(IN _userName varchar(12), IN _id mediumint,  IN _status smallint)
+	begin
+		update meetings 
+		set status = _status
+		where toUserName = _userName and id = _id;
+	end//
+delimiter ;
+
+
+drop procedure dopMeetRequests;		
+delimiter //
+create procedure dopMeetRequests()
+	begin
+		delete from meetings 
+		where meetDateTime < unix_timestamp();
+	end//
+delimiter ;
+
+
+drop procedure createMessageRequest;		
+delimiter //
+create procedure createMessageRequest(
+								IN _fromUserName varchar(12), 
+								IN _toUserName varchar(12),
+								IN _subject varchar(35),
+								IN _message varchar(500)
+							)
+	begin
+		insert into messages(fromUserName, toUserName, subject, message, status)
+		values(_fromUserName, _toUserName, _subject, _message, 0);
+	end//
+delimiter ;
+
+
+
+drop procedure showMessageRequests;		
+delimiter //
+create procedure showMessageRequests(IN _userName varchar(12))
+	begin
+		select id, fromUserName, subject, message, status
+		from messages
+		where toUserName = _userName;
+	end//
+delimiter ;
+
+
+drop procedure updateMessageRequestStatus;		
+delimiter //
+create procedure updateMessageRequestStatus(IN _userName varchar(12), IN _id mediumint,  IN _status smallint)
+	begin
+		update messages 
+		set status = _status
+		where toUserName = _userName and id = _id;
+	end//
+delimiter ;
+
+
+
 
 drop procedure updateLocation;		
 delimiter //
@@ -260,10 +299,7 @@ begin
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
 	BEGIN
 		rollback;
-		GET DIAGNOSTICS CONDITION 1 @sqlstate = RETURNED_SQLSTATE, 
- 		@errno = MYSQL_ERRNO, @text = MESSAGE_TEXT;
-		signal @sqlstate;
-		
+		resignal;
 	END;
 	start transaction;
 		insert into users(username, password) values(_username, md5(_pwd));

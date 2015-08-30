@@ -6,6 +6,15 @@
 
 	<import resource="resourceMgmt-security.xml"/>
 	
+	<bean id="meetingService" class="prj.resources.mgmt.services.MeetingServiceImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<bean id="messageService" class="prj.resources.mgmt.services.MessageServiceImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	
 	<bean id="registrationService" class="prj.resources.mgmt.services.RegistrationServiceImpl">
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
