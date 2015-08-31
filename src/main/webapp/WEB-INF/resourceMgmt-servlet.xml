@@ -22,6 +22,7 @@
 
 	<mvc:annotation-driven>
 		<mvc:message-converters>
+		
 			<!-- Used to marshall JSON response -->
 			<bean
 				class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
@@ -38,16 +39,22 @@
 			</bean>
 			
 		</mvc:message-converters>
+
 	</mvc:annotation-driven>
 
-	<!-- No need of a Web Resolver as we do not have any views rendered by Spring 
-		MVC -->
+	<!-- No need of a Web Resolver as we do not have any views rendered by Spring MVC -->
 	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> 
 		<property name="prefix" value="/html/" /> <property name="suffix" value=".jsp" 
 		/> </bean> -->
 
-	<bean id="multipartResolver"
-		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="prj.resources.mgmt.filter.ResponseMutationInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
+	<bean id="multipartResolver"	class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
+	
 </beans>
