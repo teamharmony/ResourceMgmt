@@ -199,7 +199,7 @@ create procedure findUserByName(IN _name varchar(30))
 			ud.latitude,
 			ud.longitude
 		from user_details as ud
-		 where 	lower(ud.name) = lower(_name) and
+		 where 	lower(ud.name) like concat('%',  lower(_name) , '%')  and
 		 ud.visible != 0;
 	end//
 delimiter ;
