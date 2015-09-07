@@ -97,6 +97,7 @@ public class MeetingServiceImpl implements MeetingService {
 									
 										Meeting meet = new Meeting.MeetingBuilder().id(rs.getInt("id"))
 												.fromUserName(rs.getString("fromUserName"))
+												.toUserName(rs.getString("toUserName"))
 												.agenda(rs.getString("agenda"))
 												.details(rs.getString("details"))
 												.dateTime(rs.getInt("meetDateTime"))

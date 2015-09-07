@@ -38,14 +38,25 @@
 		<intercept-url pattern="/resources" method="POST"
 			access="ROLE_ANONYMOUS" /> <!-- in-secured POST -->
 		<intercept-url pattern="/resources/**" access="ROLE_USER" />
+		<!-- dont think we need validation points to be listed here -->
 		<!--  New validation end-points -->
-		<intercept-url pattern="/validate/userName" access="ROLE_ANONYMOUS" />
+	 	<intercept-url pattern="/validate/userName" access="ROLE_ANONYMOUS" />
 		<intercept-url pattern="/validate/email" access="ROLE_ANONYMOUS" />
 		<!--  New validation end-points END -->
 		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
 		<access-denied-handler ref="oauthAccessDeniedHandler" />
 	</http>
 	
+	<http pattern="/feedback/**" create-session="never"
+		entry-point-ref="oauthAuthenticationEntryPoint"
+		access-decision-manager-ref="accessDecisionManager"
+		xmlns="http://www.springframework.org/schema/security">
+		<intercept-url pattern="/feedback/**" access="ROLE_USER" />
+		<custom-filter ref="resourceServerFilter" before="PRE_AUTH_FILTER" />
+		<access-denied-handler ref="oauthAccessDeniedHandler" />
+	</http>
+
+
 	<http pattern="/meetings/**" create-session="never"
 		entry-point-ref="oauthAuthenticationEntryPoint"
 		access-decision-manager-ref="accessDecisionManager"

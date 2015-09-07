@@ -1,15 +1,14 @@
 package prj.resources.mgmt.domain;
 
 public class Message {
-	public static final int READ = 1;
-	public static final int UNREAD = 0;
 	
 	private int id;
 	private String toUserName;
 	private String fromUserName;
 	private String subject;
 	private String message;
-	private int status = UNREAD;
+	private int fromStatus;
+	private int toStatus;
 	
 	public int getId() {
 		return id;
@@ -27,8 +26,11 @@ public class Message {
 	public String getMessage() {
 		return message;
 	}
-	public int getStatus() {
-		return status;
+	public int getFromStatus() {
+		return fromStatus;
+	}
+	public int getToStatus() {
+		return toStatus;
 	}
 	
 	public Message(MessageBuilder builder) {
@@ -37,7 +39,8 @@ public class Message {
 		this.fromUserName = builder.fromUserName;
 		this.subject = builder.subject;
 		this.message = builder.message;
-		this.status = builder.status;
+		this.fromStatus = builder.fromStatus;
+		this.toStatus = builder.toStatus;
 	}
 	
 	public static class MessageBuilder {
@@ -46,7 +49,8 @@ public class Message {
 		private String fromUserName;
 		private String subject;
 		private String message;
-		private int status;
+		private int fromStatus;
+		private int toStatus;
 		
 		public MessageBuilder id(int value) {
 			this.id = value;
@@ -74,10 +78,16 @@ public class Message {
 		}
 		
 		
-		public MessageBuilder status(int value) {
-			this.status = value;
+		public MessageBuilder fromStatus(int value) {
+			this.fromStatus = value;
 			return this;
 		}
+		
+		public MessageBuilder toStatus(int value) {
+			this.toStatus = value;
+			return this;
+		}
+		
 		
 		public Message build() {
 			return new Message(this);

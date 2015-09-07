@@ -59,7 +59,11 @@ public class PasswordGenerationController {
 			String email = registrationService.getEmailByName(body.getFirst("username"));
 			String newPassword = pwdGenerator.generatePwd();
 			registrationService.updatePwd(body.getFirst("username"), newPassword, 1);
-			mailNotifier.sendPasswordInEmail(email, newPassword);
+			String subject = "Password for InstaMeet";
+			String message = "Dear Sir \n\n" +
+					"The new password is " + newPassword + "\n\n" +
+					"Thank you.";
+			mailNotifier.sendEmail("system@localhost", email, message, subject);
 			return new ResponseEntity<Object>(HttpStatus.OK);
 
 	}

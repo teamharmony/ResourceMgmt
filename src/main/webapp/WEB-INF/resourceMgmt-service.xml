@@ -14,6 +14,9 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
+	<bean id="feedbackService" class="prj.resources.mgmt.services.FeedbackServiceImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
 	
 	<bean id="registrationService" class="prj.resources.mgmt.services.RegistrationServiceImpl">
 		<property name="dataSource" ref="dataSource"></property>

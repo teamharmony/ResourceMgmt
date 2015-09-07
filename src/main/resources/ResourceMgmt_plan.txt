@@ -52,6 +52,7 @@ create table meetings(
 	foreign key(toUserName) references users(username)
 ) engine=InnoDB;
 
+
 drop table messages;
 create table messages(
 	id MEDIUMINT NOT NULL AUTO_INCREMENT,
@@ -59,13 +60,38 @@ create table messages(
 	toUserName varchar(12) not null,
 	subject varchar(35) not null,
 	message varchar(500) not null,
-	status mediumint not null default 0,
+	fromStatus smallint not null default 0,
+	toStatus smallint not null default 0,
 	primary key(id),
 	foreign key(fromUserName) references users(username),
 	foreign key(toUserName) references users(username)
 
 );
 
+
+drop table feedback;
+create table feedback(
+	id mediumint not null auto_increment,
+	fromUserName varchar(12) not null,
+	subject varchar(35) not null,
+	message varchar(500) not null,
+	primary key(id),
+	foreign key(fromUserName) references users(username)
+);
+
+
+drop procedure createFeedbackRequest;		
+delimiter //
+create procedure createFeedbackRequest(
+								IN _fromUserName varchar(12), 
+								IN _subject varchar(35),
+								IN _message varchar(500)
+							)
+	begin
+		insert into feedback(fromUserName, subject, message)
+		values(_fromUserName, _subject, _message);
+	end//
+delimiter ;
 
 
 drop procedure createMeetRequest;		
@@ -89,18 +115,50 @@ drop procedure showMeetRequests;
 delimiter //
 create procedure showMeetRequests(IN _userName varchar(12))
 	begin
+
+		DROP TEMPORARY TABLE IF EXISTS tblResults;
+	  	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
+			id mediumint not null,
+			fromUserName varchar(12),
+			toUserName varchar(12),
+			agenda varchar(35),
+			details varchar(500),
+			meetDateTime int unsigned,
+			venue varchar(200),
+			status smallint
+	  	);
+	
+		insert into tblResults (id, fromUserName, agenda, details, meetDateTime, venue, status)
 		select id, fromUserName, agenda, details, meetDateTime, venue, status
 		from meetings
-		where toUserName = _userName and
-			meetDateTime > unix_timestamp();
+		where toUserName = _userName;
+
+		insert into tblResults(id, toUserName, agenda, details, meetDateTime, venue, status)
+		select id, toUserName, agenda, details, meetDateTime, venue, status
+		from meetings
+		where fromUserName = _userName;
+		
+		select * from tblResults;
+		
 	end//
 delimiter ;
+
 
 
 drop procedure updateMeetRequestStatus;		
 delimiter //
 create procedure updateMeetRequestStatus(IN _userName varchar(12), IN _id mediumint,  IN _status smallint)
 	begin
+		DECLARE meetExist INT DEFAULT 0;
+		
+		select count(*) into meetExist from meetings
+		where toUserName = _userName and id = _id;
+		
+		if meetExist <= 0 then
+			SIGNAL SQLSTATE VALUE '99999'
+      		SET MESSAGE_TEXT = 'An error occurred, No such meeting present.';			
+		end if;
+			
 		update meetings 
 		set status = _status
 		where toUserName = _userName and id = _id;
@@ -127,8 +185,8 @@ create procedure createMessageRequest(
 								IN _message varchar(500)
 							)
 	begin
-		insert into messages(fromUserName, toUserName, subject, message, status)
-		values(_fromUserName, _toUserName, _subject, _message, 0);
+		insert into messages(fromUserName, toUserName, subject, message, fromStatus, toStatus)
+		values(_fromUserName, _toUserName, _subject, _message, 0, 0);
 	end//
 delimiter ;
 
@@ -138,9 +196,29 @@ drop procedure showMessageRequests;
 delimiter //
 create procedure showMessageRequests(IN _userName varchar(12))
 	begin
-		select id, fromUserName, subject, message, status
+
+		DROP TEMPORARY TABLE IF EXISTS tblResults;
+	  	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
+			id MEDIUMINT,
+			fromUserName varchar(12),
+			toUserName varchar(12),
+			subject varchar(35),
+			message varchar(500),
+			fromStatus smallint,
+			toStatus smallint
+	  	);
+
+		insert into tblResults (id, fromUserName, subject, message, toStatus, fromStatus)
+		select id, fromUserName, subject, message, toStatus, fromStatus
 		from messages
 		where toUserName = _userName;
+		
+		insert into tblResults(id, toUserName, subject, message, fromStatus, toStatus)
+		select id, toUserName, subject, message, fromStatus, toStatus
+		from messages
+		where fromUserName = _userName;
+		
+		select * from tblResults;
 	end//
 delimiter ;
 
@@ -149,12 +227,31 @@ drop procedure updateMessageRequestStatus;
 delimiter //
 create procedure updateMessageRequestStatus(IN _userName varchar(12), IN _id mediumint,  IN _status smallint)
 	begin
-		update messages 
-		set status = _status
-		where toUserName = _userName and id = _id;
+		DECLARE msgExist INT DEFAULT 0;
+		DECLARE creator  INT DEFAULT 0;
+		
+		select count(*) into msgExist from messages
+		where id = _id;
+		
+		if msgExist <= 0 then
+			SIGNAL SQLSTATE VALUE '99999'
+      		SET MESSAGE_TEXT = 'An error occurred, No such message present.';			
+		end if;
+		
+		select count(*) into creator from messages 	
+		where fromUserName = _userName and id = _id;
+		
+		if creator > 0 then
+			update messages 
+			set fromStatus = _status
+			where id = _id;
+		else
+			update messages 
+			set toStatus = _status
+			where id = _id;		
+		end if;	
 	end//
 delimiter ;
-
 
 
 
