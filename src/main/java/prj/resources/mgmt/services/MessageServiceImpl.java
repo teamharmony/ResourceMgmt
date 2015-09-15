@@ -92,6 +92,8 @@ public class MessageServiceImpl implements MessageService {
 									Message meet = new Message.MessageBuilder().id(rs.getInt("id"))
 											.fromUserName(rs.getString("fromUserName"))
 											.toUserName(rs.getString("toUserName"))
+											.toName(rs.getString("toName"))
+											.fromName(rs.getString("fromName"))
 											.subject(rs.getString("subject"))
 											.message(rs.getString("message"))
 											.fromStatus(rs.getInt("fromStatus"))

@@ -1,13 +1,14 @@
 package prj.resources.mgmt.domain;
 
+import prj.resources.mgmt.domain.Message.MessageBuilder;
+
 public class Meeting {
-	public static final int ACCEPTED = 1;
-	public static final int CREATED = 0;
-	public static final int REJECTED = -1;
-	
+
 	private int id;
 	private String toUserName;
 	private String fromUserName;
+	private String fromName;
+	private String toName;
 	private String agenda;
 	private String details;
 	private long datetime;
@@ -17,7 +18,12 @@ public class Meeting {
 	public int getId() {
 		return id;
 	}
-	
+	public String getToName() {
+		return toName;
+	}
+	public String getFromName() {
+		return fromName;
+	}	
 	public String getToUserName() {
 		return toUserName;
 	}
@@ -42,6 +48,8 @@ public class Meeting {
 	
 	public Meeting(MeetingBuilder builder) {
 		this.id = builder.id;
+		this.toName = builder.toName;
+		this.fromName = builder.fromName;		
 		this.toUserName = builder.toUserName;
 		this.fromUserName = builder.fromUserName;
 		this.agenda = builder.agenda;
@@ -55,6 +63,8 @@ public class Meeting {
 		private int id;
 		private String toUserName;
 		private String fromUserName;
+		private String toName;
+		private String fromName;
 		private String agenda;
 		private String details;
 		private long datetime;
@@ -66,6 +76,15 @@ public class Meeting {
 			return this;
 		}
 		
+		public MeetingBuilder toName(String value) {
+			this.toName = value;
+			return this;
+		}
+		
+		public MeetingBuilder fromName(String value) {
+			this.fromName = value;
+			return this;
+		}		
 		public MeetingBuilder toUserName(String value) {
 			this.toUserName = value;
 			return this;
