@@ -145,7 +145,7 @@ create procedure showMeetRequests(IN _userName varchar(12))
 			status smallint
 	  	);
 	
-		insert into tblResults (id, fromUserName, fromName agenda, details, meetDateTime, venue, status)
+		insert into tblResults (id, fromUserName, fromName, agenda, details, meetDateTime, venue, status)
 		select id, fromUserName, fromName, agenda, details, meetDateTime, venue, status
 		from meetings
 		where toUserName = _userName;
@@ -202,8 +202,21 @@ create procedure createMessageRequest(
 								IN _message varchar(500)
 							)
 	begin
-		insert into messages(fromUserName, toUserName, subject, message, fromStatus, toStatus)
-		values(_fromUserName, _toUserName, _subject, _message, 0, 0);
+	
+	
+		DECLARE _fromName varchar(30);
+		DECLARE _toName varchar(30);
+		
+		select name into _fromName 
+		from userdetails 
+		where username = _fromUserName;
+		
+		select name into _toName 
+		from userdetails 
+		where username = _toUserName;
+		
+		insert into messages(fromUserName, toUserName, fromName, toName, subject, message, fromStatus, toStatus)
+		values(_fromUserName, _toUserName, _fromName, _toName, _subject, _message, 0, 0);
 	end//
 delimiter ;
 
@@ -227,16 +240,6 @@ create procedure showMessageRequests(IN _userName varchar(12))
 			toStatus smallint
 	  	);
 
-		DECLARE _fromName varchar(30);
-		DECLARE _toName varchar(30);
-		
-		select name into _fromName 
-		from userdetails 
-		where username = _fromUserName;
-		
-		select name into _toName 
-		from userdetails 
-		where username = _toUserName;
 		
 		insert into tblResults (id, fromUserName, fromName, subject, message, toStatus, fromStatus)
 		select id, fromUserName, fromName, subject, message, toStatus, fromStatus
