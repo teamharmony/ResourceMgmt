@@ -7,8 +7,7 @@ public class Meeting {
 	private int id;
 	private String toUserName;
 	private String fromUserName;
-	private String fromName;
-	private String toName;
+	private String name;
 	private String agenda;
 	private String details;
 	private long datetime;
@@ -18,12 +17,9 @@ public class Meeting {
 	public int getId() {
 		return id;
 	}
-	public String getToName() {
-		return toName;
+	public String getName() {
+		return name;
 	}
-	public String getFromName() {
-		return fromName;
-	}	
 	public String getToUserName() {
 		return toUserName;
 	}
@@ -48,8 +44,7 @@ public class Meeting {
 	
 	public Meeting(MeetingBuilder builder) {
 		this.id = builder.id;
-		this.toName = builder.toName;
-		this.fromName = builder.fromName;		
+		this.name = builder.name;
 		this.toUserName = builder.toUserName;
 		this.fromUserName = builder.fromUserName;
 		this.agenda = builder.agenda;
@@ -63,8 +58,7 @@ public class Meeting {
 		private int id;
 		private String toUserName;
 		private String fromUserName;
-		private String toName;
-		private String fromName;
+		private String name;
 		private String agenda;
 		private String details;
 		private long datetime;
@@ -76,15 +70,11 @@ public class Meeting {
 			return this;
 		}
 		
-		public MeetingBuilder toName(String value) {
-			this.toName = value;
+		public MeetingBuilder name(String value) {
+			this.name = value;
 			return this;
 		}
 		
-		public MeetingBuilder fromName(String value) {
-			this.fromName = value;
-			return this;
-		}		
 		public MeetingBuilder toUserName(String value) {
 			this.toUserName = value;
 			return this;

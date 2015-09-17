@@ -41,9 +41,7 @@ drop table meetings;
 create table meetings(
 	id mediumint not null auto_increment,
 	fromUserName varchar(12) not null,
-	fromName varchar(30),
 	toUserName varchar(12) not null,
-	toName varchar(30),
 	agenda varchar(35) not null,
 	details varchar(500) not null,
 	meetDateTime int unsigned,
@@ -59,9 +57,7 @@ drop table messages;
 create table messages(
 	id MEDIUMINT NOT NULL AUTO_INCREMENT,
 	fromUserName varchar(12) not null,
-	fromName varchar(30),
 	toUserName varchar(12) not null,
-	toName varchar(30),
 	subject varchar(35) not null,
 	message varchar(500) not null,
 	fromStatus smallint not null default 0,
@@ -109,19 +105,8 @@ create procedure createMeetRequest(
 								IN _venue varchar(200)
 							)
 	begin
-		DECLARE _fromName varchar(30);
-		DECLARE _toName varchar(30);
-		
-		select name into _fromName 
-		from userdetails 
-		where username = _fromUserName;
-		
-		select name into _toName 
-		from userdetails 
-		where username = _toUserName;
-	
-		insert into meetings(fromUserName, toUserName, fromName, toName, agenda, details, meetDateTime, venue, status)
-		values(_fromUserName, _toUserName, _fromName, _toName, _agenda, _details, _dateTime, _venue, 0);
+		insert into meetings(fromUserName, toUserName, agenda, details, meetDateTime, venue, status)
+		values(_fromUserName, _toUserName, _agenda, _details, _dateTime, _venue, 0);
 	end//
 delimiter ;
 
@@ -135,9 +120,7 @@ create procedure showMeetRequests(IN _userName varchar(12))
 	  	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
 			id mediumint not null,
 			fromUserName varchar(12),
-			fromName varchar(30),
 			toUserName varchar(12),
-			toName varchar(30),
 			agenda varchar(35),
 			details varchar(500),
 			meetDateTime int unsigned,
@@ -145,17 +128,18 @@ create procedure showMeetRequests(IN _userName varchar(12))
 			status smallint
 	  	);
 	
-		insert into tblResults (id, fromUserName, fromName, agenda, details, meetDateTime, venue, status)
-		select id, fromUserName, fromName, agenda, details, meetDateTime, venue, status
-		from meetings
-		where toUserName = _userName;
+		insert into tblResults (id, fromUserName, agenda, details, meetDateTime, venue, status)
+		select m.id, m.fromUserName, m.agenda, m.details, m.meetDateTime, m.venue, m.status
+		from meetings as m
+		where m.toUserName = _userName;
 
-		insert into tblResults(id, toUserName, toName, agenda, details, meetDateTime, venue, status)
-		select id, toUserName, toName, agenda, details, meetDateTime, venue, status
-		from meetings
-		where fromUserName = _userName;
+		insert into tblResults(id, toUserName, agenda, details, meetDateTime, venue, status)
+		select m.id, m.toUserName, m.agenda, m.details, m.meetDateTime, m.venue, m.status
+		from meetings as m
+		where m.fromUserName = _userName;
 		
-		select * from tblResults;
+		select m.id, m.fromUserName, m.toUserName, m.agenda, m.details, m.meetDateTime, m.venue, m.status, u.name from tblResults as m, user_details as u
+		where u.username = m.fromUserName or u.username = m.toUserName;
 		
 	end//
 delimiter ;
@@ -203,20 +187,8 @@ create procedure createMessageRequest(
 							)
 	begin
 	
-	
-		DECLARE _fromName varchar(30);
-		DECLARE _toName varchar(30);
-		
-		select name into _fromName 
-		from userdetails 
-		where username = _fromUserName;
-		
-		select name into _toName 
-		from userdetails 
-		where username = _toUserName;
-		
-		insert into messages(fromUserName, toUserName, fromName, toName, subject, message, fromStatus, toStatus)
-		values(_fromUserName, _toUserName, _fromName, _toName, _subject, _message, 0, 0);
+		insert into messages(fromUserName, toUserName, subject, message, fromStatus, toStatus)
+		values(_fromUserName, _toUserName, _subject, _message, 0, 0);
 	end//
 delimiter ;
 
@@ -231,9 +203,7 @@ create procedure showMessageRequests(IN _userName varchar(12))
 	  	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
 			id MEDIUMINT,
 			fromUserName varchar(12),
-			fromName varchar(30),
 			toUserName varchar(12),
-			toName varchar(30),
 			subject varchar(35),
 			message varchar(500),
 			fromStatus smallint,
@@ -241,17 +211,21 @@ create procedure showMessageRequests(IN _userName varchar(12))
 	  	);
 
 		
-		insert into tblResults (id, fromUserName, fromName, subject, message, toStatus, fromStatus)
-		select id, fromUserName, fromName, subject, message, toStatus, fromStatus
-		from messages
-		where toUserName = _userName;
+		insert into tblResults (id, fromUserName, subject, message, toStatus, fromStatus)
+		select m.id, m.fromUserName, m.subject, m.message, m.toStatus, m.fromStatus
+		from messages as m
+		where m.toUserName = _userName;
 		
-		insert into tblResults(id, toUserName, toName, subject, message, fromStatus, toStatus)
-		select id, toUserName, toName, subject, message, fromStatus, toStatus
-		from messages
-		where fromUserName = _userName;
+		insert into tblResults(id, toUserName, subject, message, fromStatus, toStatus)
+		select m.id, m.toUserName, m.subject, m.message, m.fromStatus, m.toStatus
+		from messages as m
+		where m.fromUserName = _userName;
+	
+										
+		select m.id, m.fromUserName, m.toUserName, m.subject, m.message, m.toStatus, m.fromStatus, u.name from tblResults as m, user_details as u
+		where u.username = m.fromUserName or u.username = m.toUserName;
+				
 		
-		select * from tblResults;
 	end//
 delimiter ;
 

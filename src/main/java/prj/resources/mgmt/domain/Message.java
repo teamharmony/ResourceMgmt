@@ -5,8 +5,7 @@ public class Message {
 	private int id;
 	private String toUserName;
 	private String fromUserName;
-	private String fromName;
-	private String toName;
+	private String name;
 	private String subject;
 	private String message;
 	private int fromStatus;
@@ -15,11 +14,8 @@ public class Message {
 	public int getId() {
 		return id;
 	}
-	public String getToName() {
-		return toName;
-	}
-	public String getFromName() {
-		return fromName;
+	public String getName() {
+		return name;
 	}
 	public String getToUserName() {
 		return toUserName;
@@ -42,8 +38,7 @@ public class Message {
 	
 	public Message(MessageBuilder builder) {
 		this.id = builder.id;
-		this.toName = builder.toName;
-		this.fromName = builder.fromName;		
+		this.name = builder.name;
 		this.toUserName = builder.toUserName;
 		this.fromUserName = builder.fromUserName;
 		this.subject = builder.subject;
@@ -56,8 +51,7 @@ public class Message {
 		private int id;
 		private String toUserName;
 		private String fromUserName;
-		private String fromName;
-		private String toName;
+		private String name;
 		private String subject;
 		private String message;
 		private int fromStatus;
@@ -68,13 +62,8 @@ public class Message {
 			return this;
 		}
 
-		public MessageBuilder toName(String value) {
-			this.toName = value;
-			return this;
-		}
-		
-		public MessageBuilder fromName(String value) {
-			this.fromName = value;
+		public MessageBuilder name(String value) {
+			this.name = value;
 			return this;
 		}
 		
