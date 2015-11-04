@@ -56,9 +56,10 @@ create table meetings(
 drop table messages;
 create table messages(
 	id MEDIUMINT NOT NULL AUTO_INCREMENT,
+	parentId MEDIUMINT,
+	topicId MEDIUMINT,
 	fromUserName varchar(12) not null,
 	toUserName varchar(12) not null,
-	subject varchar(35) not null,
 	message varchar(500) not null,
 	fromStatus smallint not null default 0,
 	toStatus smallint not null default 0,
@@ -180,15 +181,16 @@ delimiter ;
 drop procedure createMessageRequest;		
 delimiter //
 create procedure createMessageRequest(
+								IN _parentId MEDIUMINT,
+								IN _topicId MEDIUMINT,
 								IN _fromUserName varchar(12), 
 								IN _toUserName varchar(12),
-								IN _subject varchar(35),
 								IN _message varchar(500)
 							)
 	begin
 	
-		insert into messages(fromUserName, toUserName, subject, message, fromStatus, toStatus)
-		values(_fromUserName, _toUserName, _subject, _message, 0, 0);
+		insert into messages(parentId, topicId, fromUserName, toUserName, message, fromStatus, toStatus)
+		values(_parentId, _topicId, _fromUserName, _toUserName, _message, 0, 0);
 	end//
 delimiter ;
 
@@ -202,29 +204,30 @@ create procedure showMessageRequests(IN _userName varchar(12))
 		DROP TEMPORARY TABLE IF EXISTS tblResults;
 	  	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
 			id MEDIUMINT,
+			parentId MEDIUMINT,
+			topicId MEDIUMINT,
 			fromUserName varchar(12),
 			toUserName varchar(12),
-			subject varchar(35),
 			message varchar(500),
 			fromStatus smallint,
 			toStatus smallint
 	  	);
 
 		
-		insert into tblResults (id, fromUserName, subject, message, toStatus, fromStatus)
-		select m.id, m.fromUserName, m.subject, m.message, m.toStatus, m.fromStatus
+		insert into tblResults (id, parentId, topicId, fromUserName, message, toStatus, fromStatus)
+		select m.id, m.parentId, m.topicId, m.fromUserName, m.message, m.toStatus, m.fromStatus
 		from messages as m
 		where m.toUserName = _userName;
 		
-		insert into tblResults(id, toUserName, subject, message, fromStatus, toStatus)
-		select m.id, m.toUserName, m.subject, m.message, m.fromStatus, m.toStatus
+		insert into tblResults(id, parentId, topicId, toUserName, message, fromStatus, toStatus)
+		select m.id, m.parentId, m.topicId, m.toUserName, m.message, m.fromStatus, m.toStatus
 		from messages as m
 		where m.fromUserName = _userName;
 	
 										
-		select m.id, m.fromUserName, m.toUserName, m.subject, m.message, m.toStatus, m.fromStatus, u.name from tblResults as m, user_details as u
+		select m.id, m.parentId, m.topicId, m.fromUserName, m.toUserName, m.message, m.toStatus, m.fromStatus from tblResults as m, user_details as u
 		where u.username = m.fromUserName or u.username = m.toUserName;
-				
+			
 		
 	end//
 delimiter ;

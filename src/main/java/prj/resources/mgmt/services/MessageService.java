@@ -1,6 +1,7 @@
 package prj.resources.mgmt.services;
 
 import java.util.List;
+import java.util.Map;
 
 import prj.resources.exception.ResourceError;
 import prj.resources.mgmt.domain.Message;

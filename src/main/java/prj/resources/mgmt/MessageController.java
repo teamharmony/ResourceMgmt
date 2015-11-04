@@ -1,6 +1,7 @@
 package prj.resources.mgmt;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,15 +48,33 @@ public class MessageController {
 	@RequestMapping(method = RequestMethod.POST)
 	public void createMeeting(@RequestBody MultiValueMap<String,String> body, 
 			HttpServletRequest request) throws ResourceError {
+		
+		int parentId;
+		int topicId;
+		
+		try{
+			parentId = Integer.parseInt(body.getFirst("parentId"));
+		}catch(NumberFormatException e) {
+			parentId = -1;
+		}
+		
+		
+		try{
+			topicId = Integer.parseInt(body.getFirst("topicId"));
+		}catch(NumberFormatException e) {
+			topicId = -1;
+		}
+		
 		String fromUserName = request.getParameter("username");
 		String ToUserName = body.getFirst("toUserName");
-		String subject = body.getFirst("subject");
 		String message = body.getFirst("message");
 		
+		
 		Message messageReq  = new Message.MessageBuilder()
+										.parentId(parentId)
+										.topicId(topicId)
 										.fromUserName(fromUserName)
 										.toUserName(ToUserName)
-										.subject(subject)
 										.message(message)
 										.build();
 		

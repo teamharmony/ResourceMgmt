@@ -2,7 +2,10 @@ package prj.resources.mgmt.services;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +22,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import prj.resources.exception.ResourceError;
 import prj.resources.mgmt.domain.Meeting;
 import prj.resources.mgmt.domain.Message;
+import prj.resources.mgmt.domain.comparators.MessageComparator;
 import prj.resources.queues.MessageQueue;
 
 public class MessageServiceImpl implements MessageService {
@@ -61,9 +65,10 @@ public class MessageServiceImpl implements MessageService {
 					dataSource).withProcedureName("createMessageRequest");
 
 			Map<String, Object> inputData = new HashMap<String, Object>();
+			inputData.put("_parentId", message.getParentId());
+			inputData.put("_topicId", message.getTopicId());
 			inputData.put("_fromUserName", message.getFromUserName());
 			inputData.put("_toUserName", message.getToUserName());
-			inputData.put("_subject", message.getSubject());
 			inputData.put("_message", message.getMessage());
 			
 			SqlParameterSource in = new MapSqlParameterSource()
@@ -90,10 +95,10 @@ public class MessageServiceImpl implements MessageService {
 									
 								
 									Message meet = new Message.MessageBuilder().id(rs.getInt("id"))
+											.parentId(rs.getInt("parentId"))
+											.topicId(rs.getInt("topicId"))
 											.fromUserName(rs.getString("fromUserName"))
 											.toUserName(rs.getString("toUserName"))
-											.name(rs.getString("name"))
-											.subject(rs.getString("subject"))
 											.message(rs.getString("message"))
 											.fromStatus(rs.getInt("fromStatus"))
 											.toStatus(rs.getInt("toStatus"))
@@ -109,10 +114,53 @@ public class MessageServiceImpl implements MessageService {
 		} catch (DataAccessException e) {
 			handleDataAcessException(e);
 		}
-		return (List<Message>) out.get("rs1");
-
+		return processMessages((List<Message>) out.get("rs1"));
 	}
 
+	
+	private List<Message> processMessages(List<Message> origLoad) {
+		List<Message> processed = new ArrayList<Message>();
+		
+		List<Message> topics = new ArrayList<Message>();
+		//sort by topics
+		Collections.sort(origLoad, new MessageComparator());
+		
+		//extract and separate the topics
+		Iterator<Message> i = origLoad.listIterator();
+		while(i.hasNext()) {
+			Message a = i.next();
+			if(a.getTopicId() != -1) {
+				break;
+			}
+			topics.add(a);
+		}
+		origLoad.removeAll(topics);
+		
+		
+		//iterate the topics and arrange items
+		Iterator<Message> topicIterator = topics.iterator();
+		while(topicIterator.hasNext()) {
+			Message topic = topicIterator.next(); 
+			List<Message> items = new ArrayList<Message>();
+			
+			Iterator<Message> itemIterator = origLoad.iterator();
+			while(itemIterator.hasNext()) {
+				Message a = itemIterator.next();
+				if(a.getTopicId() == topic.getId()) {
+					items.add(a);
+				}
+			}
+			Collections.sort(items);
+			origLoad.removeAll(items);
+			
+			items.add(0, topic);
+			processed.addAll(items);
+		}
+		
+		return processed;	
+		
+	}
+	
 	public void updateMessage(String userName, int id, int status) throws ResourceError {
 		try {
 			SimpleJdbcCall updateJdbcCall = new SimpleJdbcCall(dataSource)

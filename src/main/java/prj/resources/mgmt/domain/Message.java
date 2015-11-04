@@ -1,31 +1,46 @@
 package prj.resources.mgmt.domain;
 
-public class Message {
+
+
+public class Message implements Comparable<Message>{
 	
 	private int id;
+	private int parentId;
+	private int topicId;
 	private String toUserName;
 	private String fromUserName;
-	private String name;
-	private String subject;
 	private String message;
 	private int fromStatus;
 	private int toStatus;
 	
+	
+	
+	public int compareTo(Message src) {
+		if(this.id < src.id)
+			return -1;
+		else if(this.id > src.id)
+			return 1;
+		else
+			return 0;
+	}
+	
+	public int getParentId() {
+		return parentId;
+	}
+	public int getTopicId() {
+		return topicId;
+	}
 	public int getId() {
 		return id;
 	}
-	public String getName() {
-		return name;
-	}
+
 	public String getToUserName() {
 		return toUserName;
 	}
 	public String getFromUserName() {
 		return fromUserName;
 	}
-	public String getSubject() {
-		return subject;
-	}
+
 	public String getMessage() {
 		return message;
 	}
@@ -38,10 +53,10 @@ public class Message {
 	
 	public Message(MessageBuilder builder) {
 		this.id = builder.id;
-		this.name = builder.name;
+		this.parentId = builder.parentId;
+		this.topicId = builder.topicId;
 		this.toUserName = builder.toUserName;
 		this.fromUserName = builder.fromUserName;
-		this.subject = builder.subject;
 		this.message = builder.message;
 		this.fromStatus = builder.fromStatus;
 		this.toStatus = builder.toStatus;
@@ -49,10 +64,10 @@ public class Message {
 	
 	public static class MessageBuilder {
 		private int id;
+		private int parentId;
+		private int topicId;
 		private String toUserName;
 		private String fromUserName;
-		private String name;
-		private String subject;
 		private String message;
 		private int fromStatus;
 		private int toStatus;
@@ -62,10 +77,16 @@ public class Message {
 			return this;
 		}
 
-		public MessageBuilder name(String value) {
-			this.name = value;
+		public MessageBuilder parentId(int value) {
+			this.parentId = value;
 			return this;
 		}
+		
+		public MessageBuilder topicId(int value) {
+			this.topicId = value;
+			return this;
+		}
+
 		
 		public MessageBuilder toUserName(String value) {
 			this.toUserName = value;
@@ -77,10 +98,7 @@ public class Message {
 			return this;
 		}
 		
-		public MessageBuilder subject(String value) {
-			this.subject = value;
-			return this;
-		}
+
 		
 		public MessageBuilder message(String value) {
 			this.message = value;
