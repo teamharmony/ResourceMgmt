@@ -225,7 +225,7 @@ create procedure showMessageRequests(IN _userName varchar(12))
 		where m.fromUserName = _userName;
 	
 										
-		select m.id, m.parentId, m.topicId, m.fromUserName, m.toUserName, m.message, m.toStatus, m.fromStatus from tblResults as m, user_details as u
+		select m.id, m.parentId, m.topicId, m.fromUserName, m.toUserName, m.message, m.toStatus, m.fromStatus, u.name from tblResults as m, user_details as u
 		where u.username = m.fromUserName or u.username = m.toUserName;
 			
 		

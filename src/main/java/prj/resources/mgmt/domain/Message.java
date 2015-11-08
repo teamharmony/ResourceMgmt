@@ -12,7 +12,7 @@ public class Message implements Comparable<Message>{
 	private String message;
 	private int fromStatus;
 	private int toStatus;
-	
+	private String name;
 	
 	
 	public int compareTo(Message src) {
@@ -50,6 +50,9 @@ public class Message implements Comparable<Message>{
 	public int getToStatus() {
 		return toStatus;
 	}
+	public String getName() {
+		return name;
+	}
 	
 	public Message(MessageBuilder builder) {
 		this.id = builder.id;
@@ -60,6 +63,7 @@ public class Message implements Comparable<Message>{
 		this.message = builder.message;
 		this.fromStatus = builder.fromStatus;
 		this.toStatus = builder.toStatus;
+		this.name = builder.name;
 	}
 	
 	public static class MessageBuilder {
@@ -71,12 +75,17 @@ public class Message implements Comparable<Message>{
 		private String message;
 		private int fromStatus;
 		private int toStatus;
+		private String name;
 		
 		public MessageBuilder id(int value) {
 			this.id = value;
 			return this;
 		}
-
+		
+		public MessageBuilder name(String value) {
+			this.name = value;
+			return this;
+		}
 		public MessageBuilder parentId(int value) {
 			this.parentId = value;
 			return this;
