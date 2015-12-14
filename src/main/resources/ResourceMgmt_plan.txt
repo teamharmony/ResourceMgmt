@@ -4,23 +4,23 @@ use resourcemgmt;
 
 drop table users;
 create table users (
-	username varchar(12) not null,
+	username varchar(60) not null,
 	password varchar(32) not null,
 	resetpwd smallint default 0,
 	primary key(username)
-	) engine=InnoDB;
+	) engine=innoDB;
 
 drop table authorities;
 create table authorities (
-	username varchar(12) not null,
+	username varchar(60) not null,
 	authority varchar(10) not null,
 	foreign key(username) references users(username)
-	) engine=InnoDB;
+	) engine=innoDB;
 
 drop table user_details;
 create table user_details(
 	name varchar(30) not null,
-	username varchar(12) not null,
+	username varchar(60) not null,
 	visible smallint default 1,
 	email varchar(60) not null,
 	skill varchar(120) not null,
@@ -30,7 +30,7 @@ create table user_details(
 	longitude double,
 	primary key(email),
 	foreign key(username) references users(username)
-	) engine=InnoDB;
+	) engine=innoDB;
 
 
 CREATE UNIQUE INDEX search_by_name
@@ -40,8 +40,8 @@ ON user_details ( name);
 drop table meetings;
 create table meetings(
 	id mediumint not null auto_increment,
-	fromUserName varchar(12) not null,
-	toUserName varchar(12) not null,
+	fromUserName varchar(60) not null,
+	toUserName varchar(60) not null,
 	agenda varchar(35) not null,
 	details varchar(500) not null,
 	meetDateTime int unsigned,
@@ -50,7 +50,7 @@ create table meetings(
 	primary key(id),
 	foreign key(fromUserName) references users(username),
 	foreign key(toUserName) references users(username)
-) engine=InnoDB;
+) engine=innoDB;
 
 
 drop table messages;
@@ -58,8 +58,8 @@ create table messages(
 	id MEDIUMINT NOT NULL AUTO_INCREMENT,
 	parentId MEDIUMINT,
 	topicId MEDIUMINT,
-	fromUserName varchar(12) not null,
-	toUserName varchar(12) not null,
+	fromUserName varchar(60) not null,
+	toUserName varchar(60) not null,
 	message varchar(500) not null,
 	fromStatus smallint not null default 0,
 	toStatus smallint not null default 0,
@@ -67,24 +67,24 @@ create table messages(
 	foreign key(fromUserName) references users(username),
 	foreign key(toUserName) references users(username)
 
-);
+) engine=innoDB;
 
 
 drop table feedback;
 create table feedback(
 	id mediumint not null auto_increment,
-	fromUserName varchar(12) not null,
+	fromUserName varchar(60) not null,
 	subject varchar(35) not null,
 	message varchar(500) not null,
 	primary key(id),
 	foreign key(fromUserName) references users(username)
-);
+) engine=innoDB;
 
 
 drop procedure createFeedbackRequest;		
 delimiter //
 create procedure createFeedbackRequest(
-								IN _fromUserName varchar(12), 
+								IN _fromUserName varchar(60), 
 								IN _subject varchar(35),
 								IN _message varchar(500)
 							)
@@ -98,8 +98,8 @@ delimiter ;
 drop procedure createMeetRequest;		
 delimiter //
 create procedure createMeetRequest(
-								IN _fromUserName varchar(12), 
-								IN _toUserName varchar(12),
+								IN _fromUserName varchar(60), 
+								IN _toUserName varchar(60),
 								IN _agenda varchar(35),
 								IN _details varchar(500),
 								IN _dateTime int,
@@ -120,8 +120,8 @@ create procedure showMeetRequests(IN _userName varchar(12))
 		DROP TEMPORARY TABLE IF EXISTS tblResults;
 	  	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
 			id mediumint not null,
-			fromUserName varchar(12),
-			toUserName varchar(12),
+			fromUserName varchar(60),
+			toUserName varchar(60),
 			agenda varchar(35),
 			details varchar(500),
 			meetDateTime int unsigned,
@@ -183,8 +183,8 @@ delimiter //
 create procedure createMessageRequest(
 								IN _parentId MEDIUMINT,
 								IN _topicId MEDIUMINT,
-								IN _fromUserName varchar(12), 
-								IN _toUserName varchar(12),
+								IN _fromUserName varchar(60), 
+								IN _toUserName varchar(60),
 								IN _message varchar(500)
 							)
 	begin
@@ -206,8 +206,8 @@ create procedure showMessageRequests(IN _userName varchar(12))
 			id MEDIUMINT,
 			parentId MEDIUMINT,
 			topicId MEDIUMINT,
-			fromUserName varchar(12),
-			toUserName varchar(12),
+			fromUserName varchar(60),
+			toUserName varchar(60),
 			message varchar(500),
 			fromStatus smallint,
 			toStatus smallint
@@ -225,7 +225,7 @@ create procedure showMessageRequests(IN _userName varchar(12))
 		where m.fromUserName = _userName;
 	
 										
-		select m.id, m.parentId, m.topicId, m.fromUserName, m.toUserName, m.message, m.toStatus, m.fromStatus from tblResults as m, user_details as u
+		select m.id, m.parentId, m.topicId, m.fromUserName, m.toUserName, m.message, m.toStatus, m.fromStatus, u.name from tblResults as m, user_details as u
 		where u.username = m.fromUserName or u.username = m.toUserName;
 			
 		
@@ -267,7 +267,7 @@ delimiter ;
 
 drop procedure updateLocation;		
 delimiter //
-create procedure updateLocation(IN _username varchar(12), IN _latitude double, IN _longitude double)
+create procedure updateLocation(IN _username varchar(60), IN _latitude double, IN _longitude double)
 	begin
 		update user_details
 			set latitude = _latitude, longitude = _longitude
@@ -278,7 +278,7 @@ delimiter ;
 
 drop procedure isUserNameOccupied;		
 delimiter //
-create procedure isUserNameOccupied(IN _username varchar(12), OUT _occupied smallint )
+create procedure isUserNameOccupied(IN _username varchar(60), OUT _occupied smallint )
 	begin
 		select count(*) into _occupied from users where username = _username; 
 	end//
@@ -352,7 +352,7 @@ begin
 	DROP TEMPORARY TABLE IF EXISTS tblResults;
   	CREATE TEMPORARY TABLE IF NOT EXISTS tblResults  (
 		name varchar(30) not null,
-		username varchar(12) not null,
+		username varchar(60) not null,
 		email varchar(60) not null,
 		skill varchar(120) not null,
 		contact varchar(15) not null,
@@ -391,7 +391,7 @@ delimiter ;
 
 drop procedure registerUser;		
 delimiter //
-create procedure registerUser(IN _username varchar(12), 
+create procedure registerUser(IN _username varchar(60), 
 						IN _pwd varchar(32),
 						IN _authority varchar(10),
 						IN _name varchar(30),
@@ -428,7 +428,7 @@ delimiter ;
 
 drop procedure updateUser;
 delimiter //
-create procedure updateUser(IN _username varchar(12), 
+create procedure updateUser(IN _username varchar(60), 
 						IN _name varchar(30),
 						IN _email varchar(60),
 						IN _skill varchar(120),
@@ -473,7 +473,7 @@ delimiter ;
 
 drop procedure updatePassword;
 delimiter //
-create procedure updatePassword(IN _username varchar(12), 
+create procedure updatePassword(IN _username varchar(60), 
 						IN _pwd varchar(32), IN _resetpwd smallint)
 begin 
 	update users
@@ -485,7 +485,7 @@ delimiter ;
 
 drop procedure getUserDetails;
 delimiter //
-create procedure getUserDetails(IN _username varchar(12),
+create procedure getUserDetails(IN _username varchar(60),
 						OUT _name varchar(30),
 						OUT _email varchar(60), 
 						OUT _skill varchar(120),
@@ -504,7 +504,7 @@ delimiter ;
 
 drop procedure getUserProfilePic;
 delimiter //
-create procedure getUserProfilePic(IN _username varchar(12),
+create procedure getUserProfilePic(IN _username varchar(60),
 						OUT _profilePic longblob
 )
 begin 
@@ -516,7 +516,7 @@ delimiter ;
 
 drop procedure isPwdReset;
 delimiter //
-create procedure isPwdReset(IN _username varchar(12), OUT _resetpwd smallint)
+create procedure isPwdReset(IN _username varchar(60), OUT _resetpwd smallint)
 begin 
 		select resetpwd into _resetpwd from users
 			where username = _username;

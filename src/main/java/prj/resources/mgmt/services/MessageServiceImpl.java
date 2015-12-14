@@ -102,6 +102,7 @@ public class MessageServiceImpl implements MessageService {
 											.message(rs.getString("message"))
 											.fromStatus(rs.getInt("fromStatus"))
 											.toStatus(rs.getInt("toStatus"))
+											.name(rs.getString("name"))
 											.build();
 
 									return meet;

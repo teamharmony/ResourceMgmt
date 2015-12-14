@@ -9,11 +9,11 @@
 <script type="text/javascript" src="../js/authenticationProxy.js"></script>
 
 <script>
-		var host = "http://resourcemgmt.cfapps.io/resources";
+		var host = "http://localhost:8080/ResourceMgmt";
 		
 		function bodyLoaded() {
 			var authentication = new AuthenticationProxy(host, "meetMePal");
-			authentication.loginWithPassword("lok", "lok");
+			authentication.loginWithPassword("test", "test");
 		}
 		
 		//Demo of getAPI
