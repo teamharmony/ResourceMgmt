@@ -8,11 +8,12 @@
 <script type="text/javascript" src="../js/jquery-1.11.3.js"></script>
 <script type="text/javascript" src="../js/authenticationProxy.js"></script>
 <script>
-		var host = "http://localhost:8080/ResourceMgmt";
+		//var host = "http://localhost:8080/ResourceMgmt";
+		var host = "http://vps.hilfe.website:8080/ResourceMgmt";
 		
 		function bodyLoaded() {
 			var authentication = new AuthenticationProxy(host, "meetMePal");
-			authentication.loginWithPassword("shan_kakode", "passw0rd");
+			authentication.loginWithPassword("test6", "test6");
 		}
 		
 		

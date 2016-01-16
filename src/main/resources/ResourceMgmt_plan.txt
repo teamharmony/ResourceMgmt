@@ -114,7 +114,7 @@ delimiter ;
 
 drop procedure showMeetRequests;		
 delimiter //
-create procedure showMeetRequests(IN _userName varchar(12))
+create procedure showMeetRequests(IN _userName varchar(60))
 	begin
 
 		DROP TEMPORARY TABLE IF EXISTS tblResults;
@@ -149,7 +149,7 @@ delimiter ;
 
 drop procedure updateMeetRequestStatus;		
 delimiter //
-create procedure updateMeetRequestStatus(IN _userName varchar(12), IN _id mediumint,  IN _status smallint)
+create procedure updateMeetRequestStatus(IN _userName varchar(60), IN _id mediumint,  IN _status smallint)
 	begin
 		DECLARE meetExist INT DEFAULT 0;
 		
@@ -198,7 +198,7 @@ delimiter ;
 
 drop procedure showMessageRequests;		
 delimiter //
-create procedure showMessageRequests(IN _userName varchar(12))
+create procedure showMessageRequests(IN _userName varchar(60))
 	begin
 
 		DROP TEMPORARY TABLE IF EXISTS tblResults;
@@ -235,7 +235,7 @@ delimiter ;
 
 drop procedure updateMessageRequestStatus;		
 delimiter //
-create procedure updateMessageRequestStatus(IN _userName varchar(12), IN _id mediumint,  IN _status smallint)
+create procedure updateMessageRequestStatus(IN _userName varchar(60), IN _id mediumint,  IN _status smallint)
 	begin
 		DECLARE msgExist INT DEFAULT 0;
 		DECLARE creator  INT DEFAULT 0;
