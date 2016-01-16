@@ -9,7 +9,8 @@
 <script type="text/javascript" src="../js/authenticationProxy.js"></script>
 
 <script>
-		var host = "http://resourcemgmt.cfapps.io";
+		//var host = "http://localhost:8080/ResourceMgmt";
+		var host = "http://vps.hilfe.website:8080/ResourceMgmt";
 		
 		
 		
@@ -31,7 +32,7 @@
 		}	
 
 		function findUsersByName() {
-			var name = escape("asif")
+			var name = escape("test3")
 			$.ajax( {
 			      	url: host.concat("/search/name?name=" + name),
 			      	type: 'GET'
