@@ -76,7 +76,7 @@ public class MessageServiceImpl implements MessageService {
 			
 			createMeetJdbcCall.execute(in);
 			
-			MessageQueue.addMessage(message.getToUserName());
+			//MessageQueue.addMessage(message.getToUserName());
 		} catch (DataAccessException e) {
 			handleDataAcessException(e);
 		}

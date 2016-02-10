@@ -75,7 +75,7 @@ public class MeetingServiceImpl implements MeetingService {
 				
 				createMeetJdbcCall.execute(in);
 				
-				MeetingQueue.addMeeting(meeting.getToUserName());
+				//MeetingQueue.addMeeting(meeting.getToUserName());
 				
 			} catch (DataAccessException e) {
 				handleDataAcessException(e);

@@ -20,6 +20,7 @@ import prj.resources.exception.ClientErrorInfo;
 import prj.resources.exception.ResourceError;
 import prj.resources.mgmt.domain.Meeting;
 import prj.resources.mgmt.services.MeetingService;
+import prj.resources.mgmt.services.NotificationsUtil;
 
 @RequestMapping("/meetings")
 @Controller
@@ -64,6 +65,10 @@ public class MeetingController {
 										.build();
 		
 		meetingService.createMeeting(meeting);
+		
+		String template = "You just received a meeting request from " + fromUserName;
+		NotificationsUtil.sendNotification(template, new String[]{ToUserName}, "MEETING");
+		
 	}
 	
 	
@@ -83,7 +88,19 @@ public class MeetingController {
 			HttpServletRequest request) throws ResourceError {
 			
 		int status = Integer.parseInt(body.getFirst("status"));
+		String creator = body.getFirst("creator");
 		meetingService.updateMeeting(request.getParameter("username"), meetingId.intValue(), status);
+
+		String template = null;	
+		if(status == 1) {
+			template = "Your meeting requested was accepted by " + request.getParameter("username");
+			NotificationsUtil.sendNotification(template, new String[]{creator}, "MEETING_ACCEPTED");
+		}else if(status == -1) {
+			template = "Your meeting requested was not accepted by " + request.getParameter("username");
+			NotificationsUtil.sendNotification(template, new String[]{creator}, "MEETING_REJECTED");
+		}
+		
+		
 
 	}
 	

@@ -21,6 +21,7 @@ import prj.resources.exception.ClientErrorInfo;
 import prj.resources.exception.ResourceError;
 import prj.resources.mgmt.domain.Message;
 import prj.resources.mgmt.services.MessageService;
+import prj.resources.mgmt.services.NotificationsUtil;
 
 @RequestMapping("/messages")
 @Controller
@@ -79,6 +80,9 @@ public class MessageController {
 										.build();
 		
 		messageService.createMessage(messageReq);
+		String template = "You just received a message request from " + fromUserName;
+		NotificationsUtil.sendNotification(template, new String[]{ToUserName}, "MESSAGE");
+	
 	}
 	
 	
