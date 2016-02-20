@@ -504,11 +504,9 @@ delimiter ;
 
 drop procedure getUserProfilePic;
 delimiter //
-create procedure getUserProfilePic(IN _username varchar(60),
-						OUT _profilePic longblob
-)
+create procedure getUserProfilePic(IN _username varchar(60))
 begin 
-	select profilePic into _profilePic
+	select profilePic 
 		from user_details
 			where username = _username;
 end//

@@ -160,6 +160,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 		} catch (DataAccessException e) {
 			handleDataAcessException(e);
 		}
+		
 		return (byte[]) out.get("_profilepic");
 	}
 

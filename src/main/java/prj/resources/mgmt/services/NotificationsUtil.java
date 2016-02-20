@@ -19,9 +19,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 public class NotificationsUtil {
 	
 	  public static final String PUSHWOOSH_SERVICE_BASE_URL = "https://cp.pushwoosh.com/json/1.3/";
-	  private static final String AUTH_TOKEN = "YOUR_AUTH_TOKEN";
-	  private static final String APPLICATION_CODE = "PW_APPLICATION_CODE";
-	  private static final String USERNAME_TAG = "username";
+	  private static final String AUTH_TOKEN = "4YDg4vBFFNMVbugBmSvlaEFmRPb6QYFSXu2RGHmoDbc6HEMfvxUkIW0XZyVwskNJPJWTF7fniWovruESCpqS";
+	  private static final String APPLICATION_CODE = "EB3A4-8E46D";
+	  private static final String USERNAME_TAG = "instaUsername";
 	  
 	  public static void sendNotification(String content, String[] users, String data) {
 		    String method = "createMessage";
