@@ -22,6 +22,7 @@ import prj.resources.exception.ResourceError;
 import prj.resources.mgmt.domain.Message;
 import prj.resources.mgmt.services.MessageService;
 import prj.resources.mgmt.services.NotificationsUtil;
+import prj.resources.mgmt.services.RegistrationService;
 
 @RequestMapping("/messages")
 @Controller
@@ -29,7 +30,10 @@ public class MessageController {
 
 	@Autowired
 	private MessageService messageService;
-
+	
+	@Autowired
+	private RegistrationService registrationService;
+	
 	@ExceptionHandler()
 	public ResponseEntity<ClientErrorInfo> errorHandle(Exception e) {
 		ClientErrorInfo c;
@@ -80,7 +84,10 @@ public class MessageController {
 										.build();
 		
 		messageService.createMessage(messageReq);
-		String template = "You just received a message request from " + fromUserName;
+		
+		String name = registrationService.getUserDetailsByName(fromUserName).getName();
+		
+		String template = "You just received a message request from " + name;
 		NotificationsUtil.sendNotification(template, new String[]{ToUserName}, "MESSAGE");
 	
 	}

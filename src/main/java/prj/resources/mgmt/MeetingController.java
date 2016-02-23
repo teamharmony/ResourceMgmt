@@ -21,6 +21,7 @@ import prj.resources.exception.ResourceError;
 import prj.resources.mgmt.domain.Meeting;
 import prj.resources.mgmt.services.MeetingService;
 import prj.resources.mgmt.services.NotificationsUtil;
+import prj.resources.mgmt.services.RegistrationService;
 
 @RequestMapping("/meetings")
 @Controller
@@ -28,6 +29,9 @@ public class MeetingController {
 
 	@Autowired
 	private MeetingService meetingService;
+	
+	@Autowired
+	private RegistrationService registrationService;
 
 	@ExceptionHandler()
 	public ResponseEntity<ClientErrorInfo> errorHandle(Exception e) {
@@ -66,7 +70,9 @@ public class MeetingController {
 		
 		meetingService.createMeeting(meeting);
 		
-		String template = "You just received a meeting request from " + fromUserName;
+		String name = registrationService.getUserDetailsByName(fromUserName).getName();
+		
+		String template = "You just received a meeting request from " + name;
 		NotificationsUtil.sendNotification(template, new String[]{ToUserName}, "MEETING");
 		
 	}
@@ -92,11 +98,14 @@ public class MeetingController {
 		meetingService.updateMeeting(request.getParameter("username"), meetingId.intValue(), status);
 
 		String template = null;	
+		
+		String name = registrationService.getUserDetailsByName(request.getParameter("username")).getName();
+		
 		if(status == 1) {
-			template = "Your meeting requested was accepted by " + request.getParameter("username");
+			template = "Your meeting requested was accepted by " + name;
 			NotificationsUtil.sendNotification(template, new String[]{creator}, "MEETING_ACCEPTED");
 		}else if(status == -1) {
-			template = "Your meeting requested was not accepted by " + request.getParameter("username");
+			template = "Your meeting requested was not accepted by " + name;
 			NotificationsUtil.sendNotification(template, new String[]{creator}, "MEETING_REJECTED");
 		}
 		
