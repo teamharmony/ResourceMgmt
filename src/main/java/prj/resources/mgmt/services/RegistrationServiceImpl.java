@@ -54,13 +54,24 @@ public class RegistrationServiceImpl implements RegistrationService {
 			SqlParameterSource in = new MapSqlParameterSource().addValue(
 					"_username", userName);
 			Map<String, Object> out = getUserDetailsJdbcCall.execute(in);
-
+			
+			Location location = new Location();
+			if(out.get("_latitude") != null && out.get("_longitude") != null){
+				location.setLatitude((Double) out.get("_latitude"));
+				location.setLongitude((Double) out.get("_longitude"));
+			} else {
+				location.setLatitude(0);
+				location.setLongitude(0);
+			}
+			
+			
 			user = new User.UserBuilder().userName(userName)
 					.name((String) out.get("_name"))
 					.email((String) out.get("_email"))
 					.skills((String) out.get("_skill"))
 					.contact((String) out.get("_contact"))
 					.visible((Integer) out.get("_visible"))
+					.location(location)
 					.build();
 
 			

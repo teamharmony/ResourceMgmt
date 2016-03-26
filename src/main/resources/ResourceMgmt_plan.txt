@@ -490,11 +490,13 @@ create procedure getUserDetails(IN _username varchar(60),
 						OUT _email varchar(60), 
 						OUT _skill varchar(120),
 						OUT _contact varchar(15),
-						OUT _visible smallint
+						OUT _visible smallint,
+						OUT _latitude double,
+						OUT _longitude double
 )
 begin 
-	select name,  email, skill,  contact, visible  into  
-		_name, _email, _skill, _contact, _visible
+	select name,  email, skill,  contact, visible, latitude, longitude  into  
+		_name, _email, _skill, _contact, _visible, _latitude, _longitude
 			from user_details
 			where username = _username;
 end//
