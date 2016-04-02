@@ -70,6 +70,7 @@ public class MessageServiceImpl implements MessageService {
 			inputData.put("_fromUserName", message.getFromUserName());
 			inputData.put("_toUserName", message.getToUserName());
 			inputData.put("_message", message.getMessage());
+			inputData.put("_dateTime", message.getDatetime());
 			
 			SqlParameterSource in = new MapSqlParameterSource()
 			.addValues(inputData);
@@ -100,6 +101,7 @@ public class MessageServiceImpl implements MessageService {
 											.fromUserName(rs.getString("fromUserName"))
 											.toUserName(rs.getString("toUserName"))
 											.message(rs.getString("message"))
+											.dateTime(rs.getInt("messDateTime"))
 											.fromStatus(rs.getInt("fromStatus"))
 											.toStatus(rs.getInt("toStatus"))
 											.name(rs.getString("name"))

@@ -61,6 +61,7 @@ create table messages(
 	fromUserName varchar(60) not null,
 	toUserName varchar(60) not null,
 	message varchar(500) not null,
+	messDateTime int unsigned,
 	fromStatus smallint not null default 0,
 	toStatus smallint not null default 0,
 	primary key(id),
@@ -185,12 +186,13 @@ create procedure createMessageRequest(
 								IN _topicId MEDIUMINT,
 								IN _fromUserName varchar(60), 
 								IN _toUserName varchar(60),
-								IN _message varchar(500)
+								IN _message varchar(500),
+								IN _dateTime int 
 							)
 	begin
 	
-		insert into messages(parentId, topicId, fromUserName, toUserName, message, fromStatus, toStatus)
-		values(_parentId, _topicId, _fromUserName, _toUserName, _message, 0, 0);
+		insert into messages(parentId, topicId, fromUserName, toUserName, message, messDateTime, fromStatus, toStatus)
+		values(_parentId, _topicId, _fromUserName, _toUserName, _message, _dateTime, 0, 0);
 	end//
 delimiter ;
 
@@ -209,23 +211,24 @@ create procedure showMessageRequests(IN _userName varchar(60))
 			fromUserName varchar(60),
 			toUserName varchar(60),
 			message varchar(500),
+			messDateTime int unsigned,
 			fromStatus smallint,
 			toStatus smallint
 	  	);
 
 		
-		insert into tblResults (id, parentId, topicId, fromUserName, message, toStatus, fromStatus)
-		select m.id, m.parentId, m.topicId, m.fromUserName, m.message, m.toStatus, m.fromStatus
+		insert into tblResults (id, parentId, topicId, fromUserName, message, messDateTime, toStatus, fromStatus)
+		select m.id, m.parentId, m.topicId, m.fromUserName, m.message, m.messDateTime, m.toStatus, m.fromStatus
 		from messages as m
 		where m.toUserName = _userName;
 		
-		insert into tblResults(id, parentId, topicId, toUserName, message, fromStatus, toStatus)
-		select m.id, m.parentId, m.topicId, m.toUserName, m.message, m.fromStatus, m.toStatus
+		insert into tblResults(id, parentId, topicId, toUserName, message, messDateTime, fromStatus, toStatus)
+		select m.id, m.parentId, m.topicId, m.toUserName, m.message, m.messDateTime, m.fromStatus, m.toStatus
 		from messages as m
 		where m.fromUserName = _userName;
 	
 										
-		select m.id, m.parentId, m.topicId, m.fromUserName, m.toUserName, m.message, m.toStatus, m.fromStatus, u.name from tblResults as m, user_details as u
+		select m.id, m.parentId, m.topicId, m.fromUserName, m.toUserName, m.message, m.messDateTime, m.toStatus, m.fromStatus, u.name from tblResults as m, user_details as u
 		where u.username = m.fromUserName or u.username = m.toUserName;
 			
 		

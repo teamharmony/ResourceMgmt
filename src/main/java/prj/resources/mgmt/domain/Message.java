@@ -1,5 +1,7 @@
 package prj.resources.mgmt.domain;
 
+import prj.resources.mgmt.domain.Meeting.MeetingBuilder;
+
 
 
 public class Message implements Comparable<Message>{
@@ -10,6 +12,7 @@ public class Message implements Comparable<Message>{
 	private String toUserName;
 	private String fromUserName;
 	private String message;
+	private long datetime;
 	private int fromStatus;
 	private int toStatus;
 	private String name;
@@ -44,6 +47,11 @@ public class Message implements Comparable<Message>{
 	public String getMessage() {
 		return message;
 	}
+	
+	public long getDatetime() {
+		return datetime;
+	}
+	
 	public int getFromStatus() {
 		return fromStatus;
 	}
@@ -61,6 +69,7 @@ public class Message implements Comparable<Message>{
 		this.toUserName = builder.toUserName;
 		this.fromUserName = builder.fromUserName;
 		this.message = builder.message;
+		this.datetime = builder.datetime;
 		this.fromStatus = builder.fromStatus;
 		this.toStatus = builder.toStatus;
 		this.name = builder.name;
@@ -73,6 +82,7 @@ public class Message implements Comparable<Message>{
 		private String toUserName;
 		private String fromUserName;
 		private String message;
+		private long datetime;
 		private int fromStatus;
 		private int toStatus;
 		private String name;
@@ -114,7 +124,10 @@ public class Message implements Comparable<Message>{
 			return this;
 		}
 		
-		
+		public MessageBuilder dateTime(long value) {
+			this.datetime = value;
+			return this;
+		}
 		public MessageBuilder fromStatus(int value) {
 			this.fromStatus = value;
 			return this;

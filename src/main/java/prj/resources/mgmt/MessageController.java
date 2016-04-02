@@ -73,7 +73,7 @@ public class MessageController {
 		String fromUserName = request.getParameter("username");
 		String ToUserName = body.getFirst("toUserName");
 		String message = body.getFirst("message");
-		
+		long dateTime = Long.parseLong(body.getFirst("dateTime"));
 		
 		Message messageReq  = new Message.MessageBuilder()
 										.parentId(parentId)
@@ -81,6 +81,7 @@ public class MessageController {
 										.fromUserName(fromUserName)
 										.toUserName(ToUserName)
 										.message(message)
+										.dateTime(dateTime)
 										.build();
 		
 		messageService.createMessage(messageReq);
