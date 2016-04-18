@@ -13,15 +13,18 @@
 		
 		function bodyLoaded() {
 			var authentication = new AuthenticationProxy(host, "meetMePal");
-			authentication.loginWithPassword("test3", "test3");
+			authentication.loginWithPassword("abc", "abc");
 		}
 		
 		//Demo of getAPI
 		function getUserDetailsProxy() {
 			$.ajax( {
-			      	url: host.concat("/resources/lok?access_token=" + window.bearerToken),
+			      	url: host.concat("/resources/firstTenRecords?access_token=" + window.bearerToken),
 			      	type: 'GET'
-		    	}).done(function(o) { alert(o.fName);});
+		    	}).done(function(o) { 
+		    		alert(o.fName);
+		    		
+		    	});
 		}	
 
 </script>

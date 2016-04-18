@@ -526,3 +526,11 @@ begin
 end//
 delimiter ;
 
+drop procedure getFirst10Records;
+delimiter //
+create procedure getFirst10Records()
+begin 
+	select username, name, email, skill,  contact, visible, latitude, longitude
+			from user_details;
+end//
+delimiter ;

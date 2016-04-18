@@ -19,6 +19,8 @@ public interface RegistrationService {
 	 */
 	public User getUserDetailsByName(String userName) throws ResourceError;
 	
+	public List<User> getFirst10Records() throws ResourceError;
+	
 	/**
 	 * Fetches the Email id of the user based on the supplied user name.
 	 * 

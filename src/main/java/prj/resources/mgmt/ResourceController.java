@@ -113,6 +113,16 @@ public class ResourceController {
 		return user;
 	}
 
+	/**
+	 * Get first 10 records
+	 * @param username
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/firstTenRecords", method = RequestMethod.GET)
+	public List<User> getFirst10Records(HttpServletRequest request) throws ResourceError{
+		return registrationService.getFirst10Records();
+	}
 	
 	/**
 	 * Updates the details for a given user

@@ -283,7 +283,41 @@ public class RegistrationServiceImpl implements RegistrationService {
 		return (List<User>) out.get("rs1");
 	}
 
-	
+	public List<User> getFirst10Records() throws ResourceError {
+		String procName = "getFirst10Records";
+		Map<String, Object> out = null;
+		try {
+				SimpleJdbcCall getFirst10Records = new SimpleJdbcCall(dataSource)
+					.withProcedureName(procName).returningResultSet("rs1",
+							new RowMapper<User>() {
+								public User mapRow(ResultSet rs, int rowCount)
+										throws SQLException {
+									
+
+									Location location = new Location();
+									location.setLatitude(rs.getDouble("latitude"));
+									location.setLongitude(rs.getDouble("longitude"));
+
+									User u = new User.UserBuilder().userName(rs.getString("username"))
+											.name(rs.getString("name"))
+											.email(rs.getString("email"))
+											.skills(rs.getString("skill"))
+											.contact(rs.getString("contact"))
+											.location(location)
+											.build();
+
+									return u;
+								}
+							});
+			
+			SqlParameterSource in = new MapSqlParameterSource();
+
+			out = getFirst10Records.execute(in);
+		} catch (DataAccessException e) {
+			handleDataAcessException(e);
+		}
+		return (List<User>) out.get("rs1");
+	}
 	
 	// isPwdReset
 	public int isPasswordResetNeeded(String userName) throws ResourceError{

@@ -32,7 +32,7 @@
 		}	
 
 		function findUsersByName() {
-			var name = escape("test3")
+			var name = escape("Ghazi");
 			$.ajax( {
 			      	url: host.concat("/search/name?name=" + name),
 			      	type: 'GET'
@@ -40,7 +40,7 @@
 		    		if(!o)
 		    			return;
 		    		
-		    		var src = host + "/profilePic/" + o[0].username;
+		    		var src = host + "/profilePic/gl_easylearningwithamjad@gmail.com"; //+ o[0].username;
 		    		
 		    		$("#sampleImg").attr("src", src);
 		    		
